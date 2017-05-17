@@ -2,7 +2,7 @@ var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 
 var roleBuilder = new Role();
-roleBuilder.parts = [MOVE, CARRY, WORK, WORK, WORK];
+roleBuilder.parts = [MOVE, MOVE, CARRY, WORK, WORK];
 roleBuilder.run = function (creep) {
     if (creep.memory.building && creep.carry.energy == 0) {
         creep.memory.building = false;
@@ -14,7 +14,7 @@ roleBuilder.run = function (creep) {
     }
 
     if (creep.memory.building) {
-        var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+        var targets = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
         if (targets) {
             if (creep.build(targets) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(targets, {
@@ -27,7 +27,7 @@ roleBuilder.run = function (creep) {
             roleUpgrader.run(creep);
         }
     } else {
-        var sources = creep.pos.findClosestByPath(FIND_SOURCES);
+        var sources = creep.pos.findClosestByRange(FIND_SOURCES);
         if (creep.harvest(sources) == ERR_NOT_IN_RANGE) {
             creep.moveTo(sources, {
                 visualizePathStyle: {
