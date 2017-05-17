@@ -9,12 +9,14 @@ module.exports.loop = function () {
         }
     }
 
-    var roles = {'harvester': 2, 'upgrader': 1, 'builder': 1}
+    var roles = {'harvester': 3, 'upgrader': 1, 'builder': 2}
     Object.getOwnPropertyNames(roles).forEach(function (role) {
         var population = _.filter(Game.creeps, (creep) => creep.memory.role == role);
         if (population.length < roles[role]) {
             var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, {role: role});
-            console.log('Spawned ' + role + ': ' + newName);
+            if (newName !== ERR_NOT_ENOUGH_RESOURCES) {
+                console.log('Spawned ' + role + ': ' + newName);
+            }
         }
     });
 
