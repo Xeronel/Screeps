@@ -23,7 +23,7 @@ var roleUpgrader = {
             }
         }
 	},
-    parts: [MOVE, CARRY, WORK]
+    parts: [MOVE, CARRY, CARRY, WORK]
 };
 
 module.exports = roleUpgrader;
