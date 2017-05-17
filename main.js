@@ -1,19 +1,25 @@
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
+var memManager = require('memory.manager');
 
 module.exports.loop = function () {
-     for(var name in Memory.creeps) {
-        if(!Game.creeps[name]) {
-            delete Memory.creeps[name];
-        }
+    var roles = {
+        'harvester': { qty: 1, role: roleHarvester },
+        'upgrader': { qty: 1, role: roleUpgrader },
+        'builder': { qty: 2, role: roleBuilder }
     }
 
-    var roles = {'harvester': 3, 'upgrader': 1, 'builder': 2}
+    // Remove dead creeps from memory
+    memManager.cleanCreeps();
+
+    // Creep Spawner
     Object.getOwnPropertyNames(roles).forEach(function (role) {
+        var creepType = roles[role];
         var population = _.filter(Game.creeps, (creep) => creep.memory.role == role);
-        if (population.length < roles[role]) {
-            var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, {role: role});
+
+        if (population.length < creepType.qty) {
+            var newName = Game.spawns['Spawn1'].createCreep(creepType.role.parts, undefined, {role: role});
             if (newName !== ERR_NOT_ENOUGH_RESOURCES) {
                 console.log('Spawned ' + role + ': ' + newName);
             }
@@ -22,14 +28,10 @@ module.exports.loop = function () {
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
-        if(creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
-        }
-        if(creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        }
-        if(creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
+        if (roles.hasOwnProperty(creep.memory.role)) {
+            roles[creep.memory.role].role.run(creep);
+        } else {
+            console.log('Role: ' + creep.memory.role + ' is not in role list.');
         }
     }
 }

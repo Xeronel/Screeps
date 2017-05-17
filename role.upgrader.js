@@ -13,7 +13,8 @@ var roleUpgrader = {
                 creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
-	}
+	},
+    parts: [MOVE, CARRY, WORK]
 };
 
 module.exports = roleUpgrader;

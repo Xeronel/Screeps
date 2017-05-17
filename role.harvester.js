@@ -1,5 +1,6 @@
-var roleHarvester = {
+var roleUpgrader = require('role.upgrader');
 
+var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
 	    if(creep.carry.energy < creep.carryCapacity) {
@@ -12,8 +13,11 @@ var roleHarvester = {
             if(creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(Game.spawns['Spawn1'], {visualizePathStyle: {stroke: '#ffffff'}});
             }
+        } else {
+            roleUpgrader.run(creep);
         }
-	}
+	},
+    parts: [MOVE, CARRY, CARRY, WORK]
 };
 
 module.exports = roleHarvester;

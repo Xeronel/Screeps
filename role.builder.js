@@ -1,8 +1,6 @@
 var roleBuilder = {
-
     /** @param {Creep} creep **/
     run: function(creep) {
-
 	    if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
             creep.say('🔄 harvest');
@@ -26,7 +24,8 @@ var roleBuilder = {
                 creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
             }
 	    }
-	}
+	},
+    parts: [MOVE, CARRY, WORK]
 };
 
 module.exports = roleBuilder;
