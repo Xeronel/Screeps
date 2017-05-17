@@ -14,7 +14,7 @@ module.exports.loop = function () {
         var population = _.filter(Game.creeps, (creep) => creep.memory.role == role);
         if (population.length < roles[role]) {
             var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, { role: role });
-            console.log('Spawned ' + role + ':' + newName);
+            console.log('Spawned ' + role + ': ' + newName);
         }
     });
 
