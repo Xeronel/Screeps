@@ -7,7 +7,7 @@ module.exports.loop = function () {
     var roles = {
         'harvester': { qty: 2, role: roleHarvester },
         'upgrader': { qty: 1, role: roleUpgrader },
-        'builder': { qty: 2, role: roleBuilder }
+        'builder': { qty: 5, role: roleBuilder }
     }
 
     // Remove dead creeps from memory
@@ -20,7 +20,7 @@ module.exports.loop = function () {
 
         if (population.length < creepType.qty) {
             var newName = Game.spawns['Spawn1'].createCreep(creepType.role.parts, undefined, {role: role});
-            if (newName !== ERR_NOT_ENOUGH_RESOURCES) {
+            if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
                 console.log('Spawned ' + role + ': ' + newName);
             }
         }
