@@ -9,22 +9,14 @@ module.exports.loop = function () {
         }
     }
 
-    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-    var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-    var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    
-    if(harvesters.length < 2) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, { role: 'harvester' });
-        console.log('Spawning new harvester: ' + newName);
-    }
-    if(upgraders.length < 1) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, {role: 'upgrader'});
-        console.log('Spawning new upgrader: ' + newName);
-    }
-    if(builders.length < 1) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, {role: 'builder'});
-        console.log('Spawning new builder: ' + newName);
-    }
+    var roles = {'harvester': 2, 'upgrader': 1, 'builder': 1}
+    Object.getOwnPropertyNames(roles).forEach(function (role) {
+        var population = _.filter(Game.creeps, (creep) => creep.memory.role == role);
+        if (population.length < roles[role]) {
+            var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, { role: role });
+            console.log('Spawned ' + role + ':' + newName);
+        }
+    });
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
