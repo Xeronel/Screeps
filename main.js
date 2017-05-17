@@ -14,7 +14,7 @@ module.exports.loop = function () {
             population[creep.memory.role].role.run(creep);
             population[creep.memory.role].role.draw(creep);
         } else {
-            console.log('Role: ' + creep.memory.role + ' is not in role list.');
+            console.log('Error: ' + creep.memory.role + ' is not in role list.');
         }
     }
 }
