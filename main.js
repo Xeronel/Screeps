@@ -5,8 +5,8 @@ var memManager = require('memory.manager');
 
 module.exports.loop = function () {
     var roles = {
-        'harvester': { qty: 6, role: roleHarvester },
-        'upgrader': { qty: 2, role: roleUpgrader },
+        'harvester': { qty: 2, role: roleHarvester },
+        'upgrader': { qty: 1, role: roleUpgrader },
         'builder': { qty: 2, role: roleBuilder }
     }
 
