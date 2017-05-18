@@ -22,13 +22,7 @@ roleUpgrader.run = function (creep) {
         }
     } else {
         var cSource = creep.pos.findClosestByPath(FIND_SOURCES);
-        if (creep.harvest(cSource) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(cSource, {
-                visualizePathStyle: {
-                    stroke: '#ffaa00'
-                }
-            });
-        }
+        creep.harvest_move(cSource);
     }
 };
 

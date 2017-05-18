@@ -11,13 +11,7 @@ roleHarvester.run = function (creep) {
     });
     if (creep.carry.energy < creep.carryCapacity && structure) {
         var cSource = creep.pos.findClosestByPath(FIND_SOURCES);
-        if (creep.harvest(cSource) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(cSource, {
-                visualizePathStyle: {
-                    stroke: '#ffaa00'
-                }
-            });
-        }
+        creep.harvest_move(cSource);
     } else if (structure) {
         if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             creep.moveTo(structure, {

@@ -1,3 +1,4 @@
+require('creep.proto');
 var popManager = require('population.manager');
 var memManager = require('memory.manager');
 var population = require('population');
