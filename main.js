@@ -1,12 +1,13 @@
-var population = require('population');
+var popManager = require('population.manager');
 var memManager = require('memory.manager');
+var population = require('population');
 
 module.exports.loop = function () {
     // Remove dead creeps from memory
     memManager.cleanCreeps();
 
     // Creep Spawner
-    population.spawnCreeps();
+    popManager.spawnCreeps();
 
     for (var name in Game.creeps) {
         var creep = Game.creeps[name];
