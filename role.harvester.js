@@ -2,7 +2,7 @@ var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 
 var roleHarvester = new Role();
-roleHarvester.parts = [MOVE, CARRY, WORK];
+roleHarvester.parts = [MOVE, CARRY, CARRY, WORK, WORK];
 roleHarvester.run = function (creep) {
     var structure = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: function (obj) {
@@ -13,13 +13,7 @@ roleHarvester.run = function (creep) {
         var cSource = creep.pos.findClosestByPath(FIND_SOURCES);
         creep.harvest_move(cSource);
     } else if (structure) {
-        if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(structure, {
-                visualizePathStyle: {
-                    stroke: '#ffffff'
-                }
-            });
-        }
+        creep.transfer_move(structure);
     } else {
         roleUpgrader.run(creep);
     }

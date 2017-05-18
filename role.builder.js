@@ -2,27 +2,19 @@ var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 
 var roleBuilder = new Role();
-roleBuilder.parts = [MOVE, CARRY, WORK];
+roleBuilder.parts = [MOVE, MOVE, CARRY, WORK, WORK];
 roleBuilder.run = function (creep) {
     if (creep.memory.building && creep.carry.energy == 0) {
         creep.memory.building = false;
-        creep.say('🔄 harvest');
     }
     if (!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
         creep.memory.building = true;
-        creep.say('🚧 build');
     }
 
     if (creep.memory.building) {
         var targets = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
         if (targets) {
-            if (creep.build(targets) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(targets, {
-                    visualizePathStyle: {
-                        stroke: '#ffffff'
-                    }
-                });
-            }
+            creep.build_move(targets);
         } else {
             roleUpgrader.run(creep);
         }
