@@ -23,8 +23,8 @@ roleRepairer.run = function (creep) {
             roleBuilder.run(creep);
         }
     } else {
-        var sources = creep.pos.findClosestByPath(FIND_SOURCES);
-        creep.harvest_move(sources);
+        var source = creep.findClosestSource();
+        creep.obtainClosestSource(source);
     }
 }
 

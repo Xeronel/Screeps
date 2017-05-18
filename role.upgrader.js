@@ -13,8 +13,8 @@ roleUpgrader.run = function (creep) {
     if (creep.memory.upgrading) {
         creep.upgrade_move();
     } else {
-        var cSource = creep.pos.findClosestByPath(FIND_SOURCES);
-        creep.harvest_move(cSource);
+        var source = creep.findClosestSource();
+        creep.obtainClosestSource(source);
     }
 };
 
