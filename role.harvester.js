@@ -10,6 +10,7 @@ roleHarvester.run = function(creep) {
         }
     });
     if (creep.carry.energy < creep.carryCapacity && structure) {
+
         var cSource = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY);
         var ESource = creep.pos.findClosestByPath(FIND_SOURCES);
 
@@ -19,14 +20,10 @@ roleHarvester.run = function(creep) {
                     stroke: '#ffaa00'
                 }
             });
+        } else {
+            creep.harvest_move(ESource);
         }
-        else if (creep.harvest(ESource) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(ESource, {
-                visualizePathStyle: {
-                    stroke: '#ffaa00'
-                }
-            });
-        }
+
     } else if (structure) {
         if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             creep.moveTo(structure, {
