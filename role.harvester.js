@@ -2,7 +2,7 @@ var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 
 var roleHarvester = new Role();
-roleHarvester.parts = [MOVE, CARRY, CARRY, WORK, WORK];
+roleHarvester.parts = [MOVE, CARRY, WORK];
 roleHarvester.run = function (creep) {
     var structure = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: function (obj) {

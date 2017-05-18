@@ -1,4 +1,4 @@
-var roleUpgrader = require('role.upgrader');
+var roleBuilder = require('role.builder');
 var Role = require('role.proto');
 
 var roleRepairer = new Role();
