@@ -1,8 +1,8 @@
 var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
-
 var roleHarvester = new Role();
-roleHarvester.parts = [MOVE, CARRY, WORK];
+
+roleHarvester.parts = [MOVE, CARRY, WORK, WORK]; // Cost 300
 roleHarvester.run = function(creep) {
     var structure = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: function(obj) {
@@ -10,8 +10,8 @@ roleHarvester.run = function(creep) {
         }
     });
     if (creep.carry.energy < creep.carryCapacity && structure) {
-
-        var cSource = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY);
+        var cSource = creep.pos.findClosestByPath(FIND_SOURCES) ||
+            creep.pos.findClosestByRange(FIND_SOURCES);
         var ESource = creep.pos.findClosestByPath(FIND_SOURCES);
 
         if (creep.pickup(cSource) == ERR_NOT_IN_RANGE) {
@@ -23,15 +23,8 @@ roleHarvester.run = function(creep) {
         } else {
             creep.harvest_move(ESource);
         }
-
     } else if (structure) {
-        if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(structure, {
-                visualizePathStyle: {
-                    stroke: '#ffffff'
-                }
-            });
-        }
+        creep.transfer_move(structure);
     } else {
         roleUpgrader.run(creep);
     }
