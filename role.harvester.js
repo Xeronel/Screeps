@@ -1,8 +1,7 @@
 var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
-var roleHarvester = new Role();
 
-roleHarvester.parts = [MOVE, CARRY, WORK, WORK]; // Cost 300
+var roleHarvester = new Role();
 roleHarvester.run = function(creep) {
     var structure = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: function(obj) {

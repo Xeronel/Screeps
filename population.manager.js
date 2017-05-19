@@ -11,7 +11,7 @@ populationManager.spawnCreeps = function () {
 
         if (rolePopulation.length < creepType.qty) {
             var newName = Game.spawns['Spawn1'].createCreep(
-                creepType.role.parts,
+                creepType.parts,
                 undefined, {
                     role: role
                 }

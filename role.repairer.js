@@ -2,8 +2,7 @@ var roleBuilder = require('role.builder');
 var Role = require('role.proto');
 
 var roleRepairer = new Role();
-roleRepairer.parts = [MOVE, MOVE, CARRY, WORK, WORK];
-roleRepairer.run = function (creep) {
+roleRepairer.run = function(creep) {
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
     }
@@ -12,13 +11,12 @@ roleRepairer.run = function (creep) {
     }
 
     if (creep.memory.repairing) {
-        var structures = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-            filter: function (obj) {
-                return obj.hits < 20000 && obj.hits / obj.hitsMax <= 0.5;
-            }
+        var structures = creep.pos.find(FIND_STRUCTURES)
+        structures.sort(function(a, b) {
+            return a.hits - b.hits;
         });
-        if (structures) {
-            creep.repair_move(structures);
+        if (structures[0]) {
+            creep.repair_move(structures[0]);
         } else {
             roleBuilder.run(creep);
         }
