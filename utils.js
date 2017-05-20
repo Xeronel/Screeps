@@ -1,4 +1,4 @@
-var wrapper = {}
+var wrapper = {};
 wrapper.each = function (fn) {
     var iter = (val, idx, array) => {
         fn(val, idx, array);
@@ -8,7 +8,7 @@ wrapper.each = function (fn) {
     } else {
         Object.getOwnPropertyNames(this.object).forEach(iter);
     }
-}
+};
 
 var $ = function (obj) {
     if (obj) {
