@@ -1,11 +1,25 @@
+Creep.prototype.pickup_move = function (target) {
+    if (this.memory.lastAction !== 'pickup_move') {
+        this.say('pickup');
+    }
+    if (this.pickup(target) == ERR_NOT_IN_RANGE) {
+        this.moveTo(target, {
+            visualizePathStyle: {
+                opacity: 0.5,
+                stroke: '#ffaa00'
+            }
+        });
+    }
+    this.memory.lastAction = 'pickup_move';
+}
 Creep.prototype.harvest_move = function (target) {
     if (this.memory.lastAction !== 'harvest_move') {
         this.say('⛏️ harvest');
     }
     if (this.harvest(target) == ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
-            reusePath: 0,
             visualizePathStyle: {
+                opacity: 0.5,
                 stroke: '#ffaa00'
             }
         });
@@ -20,6 +34,7 @@ Creep.prototype.repair_move = function (target) {
     if (this.repair(target) == ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
+                opacity: 0.5,
                 stroke: '#B42929'
             }
         });
@@ -34,6 +49,7 @@ Creep.prototype.build_move = function (target) {
     if (this.build(target) == ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
+                opacity: 0.5,
                 stroke: '#7EC366'
             }
         });
@@ -48,6 +64,7 @@ Creep.prototype.transfer_move = function (target) {
     if (this.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
+                opacity: 0.5,
                 stroke: '#ffffff'
             }
         });
@@ -62,6 +79,7 @@ Creep.prototype.upgrade_move = function () {
     if (this.upgradeController(this.room.controller) == ERR_NOT_IN_RANGE) {
         this.moveTo(this.room.controller, {
             visualizePathStyle: {
+                opacity: 0.5,
                 stroke: '#00ffff'
             }
         });
@@ -76,6 +94,7 @@ Creep.prototype.withdraw_move = function (target, resourceType, amount) {
     if (this.withdraw(target, resourceType, amount) == ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
+                opacity: 0.5,
                 stroke: '#ffaa00'
             }
         });
@@ -84,22 +103,24 @@ Creep.prototype.withdraw_move = function (target, resourceType, amount) {
 }
 
 Creep.prototype.findClosestSource = function () {
-    // Keep at least 300 energy stored so new creeps can be created
-    if (this.room.energyAvailable >= 300) {
-        var source = this.pos.findClosestByPath(FIND_STRUCTURES, {
+    var source = this.pos.findClosestByPath(FIND_DROPPED_ENERGY);
+    if (source === null && this.room.energyAvailable >= 300) {
+        source = this.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: function (obj) {
                 return obj.energy >= 50;
             }
         }) || this.pos.findClosestByPath(FIND_SOURCES);
     } else {
-        var source = this.pos.findClosestByPath(FIND_SOURCES);
+        source = this.pos.findClosestByPath(FIND_SOURCES);
     }
     return source;
 }
 
 Creep.prototype.obtainClosestSource = function (target) {
     if (target) {
-        if (target.structureType) {
+        if (target.resourceType) {
+            this.pickup_move(target);
+        } else if (target.structureType) {
             this.withdraw_move(target, RESOURCE_ENERGY);
         } else {
             this.harvest_move(target);
