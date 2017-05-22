@@ -24,7 +24,7 @@ populationManager.spawnCreeps = function () {
                     }
                 );
                 if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                    console.log('Spawned ' + role + ': ' + newName);
+                    console.log('Spawning ' + role + ': ' + newName);
                 }
             }
         });

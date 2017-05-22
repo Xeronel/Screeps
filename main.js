@@ -2,6 +2,7 @@ require('creep.proto');
 var popManager = require('population.manager');
 var memManager = require('memory.manager');
 var population = require('population');
+var $ = require('utils');
 
 module.exports.loop = function () {
     // Remove dead creeps from memory
@@ -10,13 +11,14 @@ module.exports.loop = function () {
     // Creep Spawner
     popManager.spawnCreeps();
 
-    for (var name in Game.creeps) {
-        var creep = Game.creeps[name];
-        if (population.hasOwnProperty(creep.memory.role)) {
-            population[creep.memory.role].role.run(creep);
-            population[creep.memory.role].role.draw(creep);
-        } else {
-            console.log('Error: ' + creep.memory.role + ' is not in role list.');
-        }
-    }
+    $(Game.spawns).each((s) => {
+        $(Game.spawns[s].room.find(FIND_MY_CREEPS)).each((creep) => {
+            if (population.hasOwnProperty(creep.memory.role)) {
+                population[creep.memory.role].role.run(creep);
+                population[creep.memory.role].role.draw(creep);
+            } else {
+                console.log('Error running creep ' + creep.name + ' Memory: ' + JSON.stringify(creep.memory));
+            }
+        });
+    });
 }
