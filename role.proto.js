@@ -11,6 +11,5 @@ Role.prototype.draw = function (creep) {
         creep.pos.y + 1.2
     );
 };
-Role.prototype.parts = [WORK, CARRY, MOVE];
 
 module.exports = Role;
