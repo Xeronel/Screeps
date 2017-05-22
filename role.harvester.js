@@ -14,7 +14,7 @@ roleHarvester.run = function(creep) {
         var ESource = creep.pos.findClosestByPath(FIND_SOURCES);
 
         if (creep.pickup(cSource) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(cSource, {
+            creep.moveTo(cSource, {     
                 visualizePathStyle: {
                     stroke: '#ffaa00'
                 }

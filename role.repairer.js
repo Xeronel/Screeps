@@ -11,7 +11,7 @@ roleRepairer.run = function(creep) {
     }
 
     if (creep.memory.repairing) {
-        var structures = creep.pos.find(FIND_STRUCTURES)
+        var structures = creep.room.find(FIND_STRUCTURES)
         structures.sort(function(a, b) {
             return a.hits - b.hits;
         });
