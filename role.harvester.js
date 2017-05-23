@@ -16,6 +16,11 @@ roleHarvester.run = function (creep) {
             creep.pos.findClosestByPath(FIND_SOURCES, {
                 ignoreCreeps: true
             });
+        if (source) {
+            creep.harvest_move(source);
+        }
+    } else if (structure) {
+        creep.transfer_move(structure);
     } else if (storage) {
         creep.transfer_move(storage);
     } else {
