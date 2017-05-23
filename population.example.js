@@ -34,23 +34,35 @@ var population = {
             return harvestablePos;
         },
         role: roleHarvester,
-        parts: [MOVE, CARRY, WORK, WORK] // Cost 300
+        parts: [MOVE, CARRY, WORK, WORK], // Cost 300
     },
     'upgrader': {
         qty: () => 1,
         role: roleUpgrader,
-        parts: [MOVE, MOVE, CARRY, WORK, WORK]
+        parts: [MOVE, MOVE, CARRY, WORK, WORK],
     },
     'builder': {
         qty: () => 4,
         role: roleBuilder,
-        parts: [MOVE, MOVE, MOVE, CARRY, CARRY, WORK]
+        parts: [MOVE, MOVE, MOVE, CARRY, CARRY, WORK],
     },
     'repairer': {
         qty: () => 2,
         role: roleRepairer,
-        parts: [MOVE, MOVE, CARRY, WORK, WORK]
+        parts: [MOVE, MOVE, CARRY, WORK, WORK],
     }
 };
+
+$(population).each(function (role) {
+    population[role].cost = partCost(population[role].parts);
+});
+
+function partCost (parts) {
+    var cost = 0;
+    $(parts).each((s) => {
+        cost += BODYPART_COST[s];
+    });
+    return cost;
+}
 
 module.exports = population;
