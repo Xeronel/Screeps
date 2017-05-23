@@ -16,15 +16,27 @@ populationManager.spawnCreeps = function () {
                 roomPopulation,
                 (creep) => creep.memory.role == role
             );
+
             if (rolePopulation.length < creepType.qty(spawn.room)) {
-                var newName = spawn.createCreep(
-                    creepType.parts,
-                    undefined, {
-                        role: role
+                // Calculates cost available unit
+                var finalParts;
+                $(creepType.parts).each((parts) => {
+                    if ($(parts).partCost() <= spawn.room.energyAvailable) {
+                        finalParts = parts;
+                        return;
                     }
-                );
-                if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                    console.log('Spawning ' + role + ': ' + newName);
+                });
+                if (finalParts) {
+                    // Spawns a new Unit
+                    var newName = spawn.createCreep(
+                        finalParts,
+                        undefined, {
+                            role: role
+                        }
+                    );
+                    if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
+                        console.log('Spawning ' + role + ': ' + newName);
+                    }
                 }
             }
         });
