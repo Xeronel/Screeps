@@ -34,35 +34,47 @@ var population = {
             return harvestablePos;
         },
         role: roleHarvester,
-        parts: [MOVE, CARRY, WORK, WORK], // Cost 300
+        parts: [
+            [MOVE, CARRY, CARRY, CARRY, WORK, WORK, WORK],
+            [MOVE, CARRY, CARRY, CARRY, WORK, WORK],
+            [MOVE, CARRY, CARRY, WORK, WORK],
+            [MOVE, CARRY, WORK, WORK], // Cost 300
+            [MOVE, CARRY, WORK]
+        ]
     },
     'upgrader': {
         qty: () => 1,
         role: roleUpgrader,
-        parts: [MOVE, MOVE, CARRY, WORK, WORK],
+        parts: [
+            [MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK],
+            [MOVE, MOVE, MOVE, CARRY, WORK, WORK],
+            [MOVE, MOVE, CARRY, WORK, WORK],
+            [MOVE, CARRY, WORK, WORK],
+            [MOVE, CARRY, WORK]
+        ]
     },
     'builder': {
         qty: () => 4,
         role: roleBuilder,
-        parts: [MOVE, MOVE, MOVE, CARRY, CARRY, WORK],
+        parts: [
+            [MOVE, MOVE, MOVE, CARRY, CARRY, WORK, WORK],
+            [MOVE, MOVE, MOVE, CARRY, CARRY, WORK],
+            [MOVE, MOVE, CARRY, CARRY, WORK],
+            [MOVE, CARRY, CARRY, WORK],
+            [MOVE, CARRY, WORK]
+        ]
     },
     'repairer': {
         qty: () => 2,
         role: roleRepairer,
-        parts: [MOVE, MOVE, CARRY, WORK, WORK],
+        parts: [
+            [MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK],
+            [MOVE, MOVE, MOVE, CARRY, WORK, WORK],
+            [MOVE, MOVE, CARRY, WORK, WORK],
+            [MOVE, CARRY, WORK, WORK],
+            [MOVE, CARRY, WORK]
+        ]
     }
 };
-
-$(population).each(function (role) {
-    population[role].cost = partCost(population[role].parts);
-});
-
-function partCost (parts) {
-    var cost = 0;
-    $(parts).each((s) => {
-        cost += BODYPART_COST[s];
-    });
-    return cost;
-}
 
 module.exports = population;
