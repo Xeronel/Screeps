@@ -4,7 +4,7 @@ var $ = require('utils');
 
 var roleRepairer = new Role();
 roleRepairer.repairing = {}; // Store repair targets
-roleRepairer.run = function (creep) {
+roleRepairer.run = function(creep) {
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
     }
