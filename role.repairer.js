@@ -4,7 +4,7 @@ var $ = require('utils');
 
 var roleRepairer = new Role();
 roleRepairer.repairing = {}; // Store repair targets
-roleRepairer.run = function (creep) {
+roleRepairer.run = function(creep) {
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
     }
@@ -44,7 +44,7 @@ roleRepairer.run = function (creep) {
         if (structure) {
             var hitPcnt = structure.hits / structure.hitsMax;
             // Repair structures to at least 25%
-            if (structure.id !== structures[0].id && hitPcnt >= 0.25) {
+            if (structure.id !== structures[0].id && hitPcnt >= 0.50) {
                 console.log(creep.name + ' changed from ' + structure.id + '(' + hitPcnt + ') to ' + structures[0].id + '(' + structures[0].hits / structures[0].hitsMax + ')');
                 delete this.repairing[structure.id];
                 structure = structures[0];
@@ -57,6 +57,7 @@ roleRepairer.run = function (creep) {
         }
 
         if (structure) {
+            
             creep.repair_move(structure);
         } else {
             roleBuilder.run(creep);

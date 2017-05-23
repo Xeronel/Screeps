@@ -1,5 +1,5 @@
 var wrapper = {};
-wrapper.each = function(fn) {
+wrapper.each = function (fn) {
     var iter = (val, idx, array) => {
         fn(val, idx, array);
     }
@@ -10,7 +10,7 @@ wrapper.each = function(fn) {
     }
 };
 
-wrapper.partCost = function() {
+wrapper.partCost = function () {
     var cost = 0;
     $(this.object).each((s) => {
         cost += BODYPART_COST[s];
@@ -18,7 +18,7 @@ wrapper.partCost = function() {
     return cost;
 };
 
-var $ = function(obj) {
+var $ = function (obj) {
     if (obj) {
         var w = wrapper;
         w.object = obj;
