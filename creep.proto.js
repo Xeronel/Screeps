@@ -103,14 +103,22 @@ Creep.prototype.withdraw_move = function (target, resourceType, amount) {
 }
 
 Creep.prototype.findClosestSource = function () {
+    var totalEnergy = 0;
     var source = this.pos.findClosestByPath(FIND_DROPPED_ENERGY) ||
         this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-            filter: (s) => s.structureType === STRUCTURE_STORAGE && s.store.energy >= 50
+            filter: (s) => {
+                if (s.structureType === STRUCTURE_STORAGE && s.store.energy >= 50) {
+                    totalEnergy += s.store.energy;
+                    return true;
+                }
+                return false;
+            }
         });
+    totalEnergy += this.room.energyAvailable;
 
     if (source) {
         return source;
-    } else if (this.room.energyAvailable >= 300) {
+    } else if (totalEnergy >= 300) {
         source = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: (s) => s.energy >= 50
         }) || this.pos.findClosestByPath(FIND_SOURCES);
