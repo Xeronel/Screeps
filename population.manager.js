@@ -21,7 +21,8 @@ populationManager.spawnCreeps = function () {
                 // Calculates cost available unit
                 var finalParts;
                 $(creepType.parts).each((parts) => {
-                    if ($(parts).partCost() <= spawn.room.energyAvailable) {
+                    //Checks if the part is under 50% of the rooms stored energy or if the part is the cheepest 
+                    if ($(parts).partCost() / spawn.room.energyAvailable <= .5 || $(parts).partCost() === 300) {
                         finalParts = parts;
                         return;
                     }
