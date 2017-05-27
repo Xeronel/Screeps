@@ -20,13 +20,14 @@ populationManager.spawnCreeps = function () {
             if (rolePopulation.length < creepType.qty(spawn.room)) {
                 // Calculates cost available unit
                 var finalParts;
-                $(creepType.parts).each((parts) => {
-                    //Checks if the part is under 50% of the rooms stored energy or if the part is the cheepest 
+                for (var i in creepType.parts) {
+                    parts = creepType.parts[i];
                     if ($(parts).partCost() / spawn.room.energyAvailable <= .5 || $(parts).partCost() === 300) {
                         finalParts = parts;
-                        return;
+                        break;
                     }
-                });
+                }
+
                 if (finalParts) {
                     // Spawns a new Unit
                     var newName = spawn.createCreep(
