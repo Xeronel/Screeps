@@ -104,7 +104,7 @@ Creep.prototype.withdraw_move = function (target, resourceType, amount) {
 
 Creep.prototype.findClosestSource = function () {
     var totalEnergy = 0;
-    var source = this.pos.findClosestByPath(FIND_DROPPED_ENERGY) ||
+    var source = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES) ||
         this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: (s) => {
                 if (s.structureType === STRUCTURE_STORAGE && s.store.energy >= 50) {
