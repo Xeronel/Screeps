@@ -3,6 +3,11 @@ var popManager = require('population.manager');
 var memManager = require('memory.manager');
 var population = require('population');
 var $ = require('utils');
+var logger = require('logger');
+var config = require('config');
+
+var log = logger.getLogger();
+log.setLevel(config.logLevel);
 
 module.exports.loop = function () {
     // Remove dead creeps from memory
