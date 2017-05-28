@@ -22,7 +22,7 @@ module.exports.loop = function () {
                 population[creep.memory.role].role.run(creep);
                 population[creep.memory.role].role.draw(creep);
             } else {
-                console.log('Error running creep ' + creep.name + ' Memory: ' + JSON.stringify(creep.memory));
+                log.warn('Error running creep ' + creep.name + ' Memory: ' + JSON.stringify(creep.memory));
             }
         });
     });
