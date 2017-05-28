@@ -6,10 +6,9 @@ var $ = require('utils');
 var logger = require('logger');
 
 var populationManager = {};
-populationManager.spawnCreeps = function () {
+populationManager.spawnCreeps = function spawnCreeps() {
     var log = logger.getLogger('PopMan');
-
-    $(Game.spawns).each(function (spawnName) {
+    $(Game.spawns).each(function spawnLoop(spawnName) {
         var spawn = Game.spawns[spawnName];
         var roomPopulation = spawn.room.find(FIND_MY_CREEPS);
 
