@@ -23,16 +23,18 @@ populationManager.spawnCreeps = function () {
             if (rolePopulation.length < creepType.qty(spawn.room)) {
                 // Calculates cost available unit
                 var finalParts;
+                var partcost;
                 for (var i in creepType.parts) {
                     parts = creepType.parts[i];
-                    var partcost = $(parts).partCost();
-                    if ((partcost / spawn.room.energyAvailable) <= 0.75 || partcost === 300) {
+                    partcost = $(parts).partCost();
+                    if ((partcost / spawn.room.energyAvailable) <= 0.75 || partcost === 200) {
                         finalParts = parts;
                         break;
                     }
                 }
 
                 if (finalParts) {
+                    log.debug("Trying to spawn " + role + " " + finalParts + " " + partcost);
                     // Spawns a new Unit
                     var newName = spawn.createCreep(
                         finalParts,
@@ -40,8 +42,11 @@ populationManager.spawnCreeps = function () {
                             role: role
                         }
                     );
+                    if (newName == ERR_NOT_ENOUGH_RESOURCES) {
+                        log.debug('Not enough energy to spawn ' + role + ' (' + spawn.room.energyAvailable + '/' + partcost + ')');
+                    }
                     if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                        log.info('Spawning ' + role + ': ' + newName + ' ' + finalParts + ' ' + $(finalParts).partCost());
+                        log.info('Spawning ' + role + ': ' + newName + ' [' + finalParts + '](' + $(finalParts).partCost() + ')');
                     }
                 }
             }

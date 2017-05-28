@@ -9,7 +9,7 @@ var $ = require('utils');
 var log = logger.getLogger();
 log.setLevel(config.logLevel);
 
-module.exports.loop = function () {
+module.exports.loop = function main() {
     // Remove dead creeps from memory
     memManager.cleanCreeps();
 

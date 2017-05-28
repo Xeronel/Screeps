@@ -2,7 +2,7 @@ var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 
 var roleBuilder = new Role();
-roleBuilder.run = function (creep) {
+roleBuilder.run = function run(creep) {
     if (creep.memory.building && creep.carry.energy == 0) {
         creep.memory.building = false;
     }

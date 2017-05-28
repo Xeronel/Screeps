@@ -6,7 +6,7 @@ var $ = require('utils');
 
 var population = {
     'harvester': {
-        qty: (room) => {
+        qty: function qty(room) {
             var sources = room.find(FIND_SOURCES);
             // Make sure a room object exists
             if (!this.rooms)

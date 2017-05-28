@@ -5,7 +5,7 @@ var logger = require('logger');
 
 var roleRepairer = new Role();
 roleRepairer.repairing = {}; // Store repair targets
-roleRepairer.run = function (creep) {
+roleRepairer.run = function run(creep) {
     var log = logger.getLogger('RoleRepair');
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
@@ -56,7 +56,7 @@ roleRepairer.run = function (creep) {
                 creep.memory.repairTime = 0;
                 this.repairing[structure.id] = creep.name;
             }
-        } else if (!structure){
+        } else if (!structure) {
             structure = structures[0];
             log.debug(creep.name + ' set new target ' + structure.id);
             this.repairing[structure.id] = creep.name;

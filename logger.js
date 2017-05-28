@@ -11,6 +11,13 @@ logger.WARNING = 30;
 logger.INFO = 20;
 logger.DEBUG = 10;
 logger.NOTSET = 0;
+logger.levels = {};
+logger.levels[logger.CRITICAL] = 'CRITICAL';
+logger.levels[logger.ERROR] = 'ERROR';
+logger.levels[logger.WARNING] = 'WARNING';
+logger.levels[logger.INFO] = 'INFO';
+logger.levels[logger.DEBUG] = 'DEBUG';
+logger.levels[logger.NOTSET] = 'NOTSET';
 
 logger.getLogger = function (name, level) {
     level = (typeof level !== 'undefined') ?  level : loggers['root'].level;
@@ -24,6 +31,15 @@ logger.getLogger = function (name, level) {
     }
 }
 
+logger.prototype.getLevelName = function () {
+    var name = logger.levels[this.level];
+    if (name) {
+        return name;
+    } else {
+        return this.level;
+    }
+}
+
 logger.prototype.setLevel = function (level) {
     this.level = level;
     loggers[this.name].level = level;
@@ -32,7 +48,7 @@ logger.prototype.setLevel = function (level) {
 // Log to console
 logger.prototype.log = function (msg, level) {
     if (level >= this.level) {
-        console.log('[' + this.name + '] ' + msg);
+        console.log('[' + this.name + ':' + arguments.callee.caller.caller.name + ':' + this.getLevelName() + '] ' + msg);
     }
 };
 logger.prototype.critical = function (msg) {

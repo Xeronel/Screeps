@@ -2,7 +2,7 @@ var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 
 var roleHarvester = new Role();
-roleHarvester.run = function (creep) {
+roleHarvester.run = function run(creep) {
     var storage = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: (s) => s.structureType === STRUCTURE_STORAGE && s.store.energy < s.storeCapacity
     });

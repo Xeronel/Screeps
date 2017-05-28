@@ -2,9 +2,9 @@ function Role() {
     this.run = function () {};
 }
 
-Role.prototype.run = function (creep) {};
+Role.prototype.run = function run(creep) {};
 /** @param {Creep} creep **/
-Role.prototype.draw = function (creep) {
+Role.prototype.draw = function draw(creep) {
     var lbl = creep.room.visual.text(
         creep.memory.role,
         creep.pos.x,

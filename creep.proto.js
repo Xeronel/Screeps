@@ -1,4 +1,4 @@
-Creep.prototype.pickup_move = function (target) {
+Creep.prototype.pickup_move = function pickup_move(target) {
     if (this.memory.lastAction !== 'pickup_move') {
         this.say('pickup');
     }
@@ -12,7 +12,7 @@ Creep.prototype.pickup_move = function (target) {
     }
     this.memory.lastAction = 'pickup_move';
 }
-Creep.prototype.harvest_move = function (target) {
+Creep.prototype.harvest_move = function harvest_move(target) {
     if (this.memory.lastAction !== 'harvest_move') {
         this.say('⛏️ harvest');
     }
@@ -27,7 +27,7 @@ Creep.prototype.harvest_move = function (target) {
     this.memory.lastAction = 'harvest_move'
 }
 
-Creep.prototype.repair_move = function (target) {
+Creep.prototype.repair_move = function repair_move(target) {
     if (this.memory.lastAction !== 'repair_move') {
         this.say('🔧 repair');
     }
@@ -42,7 +42,7 @@ Creep.prototype.repair_move = function (target) {
     this.memory.lastAction = 'repair_move';
 }
 
-Creep.prototype.build_move = function (target) {
+Creep.prototype.build_move = function build_move(target) {
     if (this.memory.lastAction !== 'build_move') {
         this.say('🔨 build');
     }
@@ -57,7 +57,7 @@ Creep.prototype.build_move = function (target) {
     this.memory.lastAction = 'build_move';
 }
 
-Creep.prototype.transfer_move = function (target) {
+Creep.prototype.transfer_move = function transfer_move(target) {
     if (this.memory.lastAction !== 'transfer_move') {
         this.say('🚚 deposit');
     }
@@ -72,7 +72,7 @@ Creep.prototype.transfer_move = function (target) {
     this.memory.lastAction = 'transfer_move';
 }
 
-Creep.prototype.upgrade_move = function () {
+Creep.prototype.upgrade_move = function upgrade_move() {
     if (this.memory.lastAction !== 'upgrade_move') {
         this.say('⚡ upgrade');
     }
@@ -87,7 +87,7 @@ Creep.prototype.upgrade_move = function () {
     this.memory.lastAction = 'upgrade_move';
 }
 
-Creep.prototype.withdraw_move = function (target, resourceType, amount) {
+Creep.prototype.withdraw_move = function withdraw_move(target, resourceType, amount) {
     if (this.memory.lastAction !== 'withdraw_move') {
         this.say('withdraw');
     }
@@ -102,7 +102,7 @@ Creep.prototype.withdraw_move = function (target, resourceType, amount) {
     this.memory.lastAction = 'withdraw_move';
 }
 
-Creep.prototype.findClosestSource = function () {
+Creep.prototype.findClosestSource = function findClosestSource() {
     var totalEnergy = 0;
     var source = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES) ||
         this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
@@ -127,7 +127,7 @@ Creep.prototype.findClosestSource = function () {
     return this.pos.findClosestByPath(FIND_SOURCES)
 }
 
-Creep.prototype.obtainClosestSource = function (target) {
+Creep.prototype.obtainClosestSource = function obtainClosestSource(target) {
     if (target) {
         if (target.resourceType) {
             this.pickup_move(target);
