@@ -3,9 +3,12 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var population = require('population');
 var $ = require('utils');
+var logger = require('logger');
 
 var populationManager = {};
 populationManager.spawnCreeps = function () {
+    var log = logger.getLogger('PopMan');
+
     $(Game.spawns).each(function (spawnName) {
         var spawn = Game.spawns[spawnName];
         var roomPopulation = spawn.room.find(FIND_MY_CREEPS);
@@ -22,7 +25,8 @@ populationManager.spawnCreeps = function () {
                 var finalParts;
                 for (var i in creepType.parts) {
                     parts = creepType.parts[i];
-                    if ($(parts).partCost() / spawn.room.energyAvailable <= .5 || $(parts).partCost() === 300) {
+                    var partcost = $(parts).partCost();
+                    if ((partcost / spawn.room.energyAvailable) <= 0.75 || partcost === 300) {
                         finalParts = parts;
                         break;
                     }
@@ -37,7 +41,7 @@ populationManager.spawnCreeps = function () {
                         }
                     );
                     if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                        console.log('Spawning ' + role + ': ' + newName);
+                        log.info('Spawning ' + role + ': ' + newName + ' ' + finalParts + ' ' + $(finalParts).partCost());
                     }
                 }
             }

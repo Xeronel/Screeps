@@ -25,19 +25,16 @@ logger.getLogger = function (name, level) {
 }
 
 logger.prototype.setLevel = function (level) {
-    if (level) {
-        this.level = level;
-        loggers[this.name].level = level;
-    }
+    this.level = level;
+    loggers[this.name].level = level;
 }
 
 // Log to console
 logger.prototype.log = function (msg, level) {
     if (level >= this.level) {
-        console.log(this.name + ': ' + msg);
+        console.log('[' + this.name + '] ' + msg);
     }
 };
-
 logger.prototype.critical = function (msg) {
     this.log(msg, logger.CRITICAL, this);
 };
@@ -52,6 +49,25 @@ logger.prototype.info = function (msg) {
 };
 logger.prototype.debug = function (msg) {
     this.log(msg, logger.DEBUG);
+};
+
+logger.log = function (msg, level) {
+    loggers['root'].log(msg, level);
+};
+logger.critical = function (msg) {
+    loggers['root'].critical(msg);
+};
+logger.error = function (msg) {
+    loggers['root'].error(msg, logger.ERROR);
+};
+logger.warn = function (msg) {
+    loggers['root'].warn(msg, logger.WARNING);
+};
+logger.info = function (msg) {
+    loggers['root'].info(msg, logger.INFO);
+};
+logger.debug = function (msg) {
+    loggers['root'].debug(msg, logger.DEBUG);
 };
 
 loggers['root'] = new logger('root', logger.INFO);

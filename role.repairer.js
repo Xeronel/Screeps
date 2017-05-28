@@ -1,10 +1,12 @@
 var roleBuilder = require('role.builder');
 var Role = require('role.proto');
 var $ = require('utils');
+var logger = require('logger');
 
 var roleRepairer = new Role();
 roleRepairer.repairing = {}; // Store repair targets
 roleRepairer.run = function (creep) {
+    var log = logger.getLogger('RoleRepair');
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
     }
@@ -47,7 +49,7 @@ roleRepairer.run = function (creep) {
             var hitPcnt = structure.hits / structure.hitsMax;
             // Repair structures to at least 25%
             if (structure.hits === structure.hitsMax || creep.memory.repairTime >= 200) {
-                console.log(creep.name + ' changed from ' + structure.id + '(' + hitPcnt + ') to ' + structures[0].id + '(' + structures[0].hits / structures[0].hitsMax + ')');
+                log.debug(creep.name + ' changed from ' + structure.id + '(' + hitPcnt + ') to ' + structures[0].id + '(' + structures[0].hits / structures[0].hitsMax + ')');
                 delete this.repairing[structure.id];
                 //console.log(creep.name  + " " + creep.memory.repairTime);
                 structure = structures[0];
@@ -56,7 +58,7 @@ roleRepairer.run = function (creep) {
             }
         } else if (!structure){
             structure = structures[0];
-            console.log(creep.name + ' set new target ' + structure.id);
+            log.debug(creep.name + ' set new target ' + structure.id);
             this.repairing[structure.id] = creep.name;
         }
 
