@@ -77,16 +77,20 @@ roleRepairer.run = function run(creep) {
             var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
             // Repair structures to at least 25% or 200 ticks
             if (repairTarget.hits === repairTarget.hitsMax || creep.memory.repairTime >= 200) {
-                log.debug(creep.name + ' changed from ' + repairTarget.id + '(' + hitPcnt + ') to ' + untargetedStructures[0].id + '(' + untargetedStructures[0].hits / untargetedStructures[0].hitsMax + ')');
                 delete Memory.repairing[repairTarget.id];
-                repairTarget = untargetedStructures[0];
                 creep.memory.repairTime = 0;
-                Memory.repairing[repairTarget.id] = creep.name;
+                if (untargetedStructures[0]) {
+                    log.debug(creep.name + ' changed from ' + repairTarget.id + '(' + hitPcnt + ') to ' + untargetedStructures[0].id + '(' + untargetedStructures[0].hits / untargetedStructures[0].hitsMax + ')');
+                    repairTarget = untargetedStructures[0];
+                    Memory.repairing[repairTarget.id] = creep.name;
+                }
             }
         } else {
-            repairTarget = untargetedStructures[0];
-            Memory.repairing[repairTarget.id] = creep.name;
-            log.debug(creep.name + ' set new target ' + repairTarget.id);
+            if (untargetedStructures[0]) {
+                repairTarget = untargetedStructures[0];
+                Memory.repairing[repairTarget.id] = creep.name;
+                log.debug(creep.name + ' set new target ' + repairTarget.id);
+            }
         }
 
         if (repairTarget) {
