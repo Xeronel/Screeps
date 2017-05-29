@@ -12,7 +12,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
         var spawn = Game.spawns[spawnName];
         var roomPopulation = spawn.room.find(FIND_MY_CREEPS);
 
-        $(population).each(function (role) {
+        $(population).each(function popLoop(role) {
             var creepType = population[role];
             var rolePopulation = _.filter(
                 roomPopulation,
@@ -45,7 +45,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                         log.debug('Not enough energy to spawn ' + role + ' (' + spawn.room.energyAvailable + '/' + partcost + ')');
                     }
                     if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                        log.info('Spawning ' + role + ': ' + newName + ' [' + finalParts + '](' + $(finalParts).partCost() + ')');
+                        log.info('Spawning ' + role + ': ' + newName + ' [' + finalParts + '](' + partcost + '/' + spawn.room.energyAvailable + ')');
                     }
                 }
             }
