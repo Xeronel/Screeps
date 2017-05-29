@@ -45,7 +45,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                         log.debug('Not enough energy to spawn ' + role + ' (' + spawn.room.energyAvailable + '/' + partcost + ')');
                     }
                     if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                        log.info('Spawning ' + role + ': ' + newName + ' [' + finalParts + '](' + partcost + '/' + spawn.room.energyAvailable + ')');
+                        log.info('Spawning ' + role + ': ' + newName + ' [' + finalParts + '] (' + partcost + '/' + spawn.room.energyAvailable + ')');
                     }
                 }
             }
