@@ -4,9 +4,62 @@ var $ = require('utils');
 var logger = require('logger');
 
 var roleRepairer = new Role();
-roleRepairer.repairing = {}; // Store repair targets
+function getLastRepairTarget(creep) {
+    var log = logger.getLogger('RoleRepair');
+    var result;
+    var delList = {};
+
+    for (var s in Memory.repairing) {
+        var creepName = Memory.repairing[s];
+        // Flag dead creeps for removal from memory
+        if (Game.creeps[creepName] === undefined) {
+            delList[s] = true;
+        }
+
+        if (creepName === creep.name) {
+            result = Game.getObjectById(s);
+            break;
+        } else {
+            result = false;
+        }
+    }
+
+    for (var c in delList) {
+        log.debug("Cleaning node " + c + " from repair memory.");
+        delete Memory.repairing[c];
+    }
+
+    return result;
+}
+
+function getUntargedStructures(creep) {
+    // Get sources that are not being targeted by other repairers
+    var structures = creep.room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            var repairing = Memory.repairing[structure.id];
+            if (structure.hits == structure.hitsMax) {
+                return false;
+            }
+            if (repairing && repairing === creep.name) {
+                return true;
+            } else if (repairing && repairing !== creep.name) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    });
+    structures.sort((a, b) => a.hits - b.hits);
+    return structures;
+}
+
 roleRepairer.run = function run(creep) {
     var log = logger.getLogger('RoleRepair');
+    var repairTarget;
+
+    if (Memory.repairing === undefined) {
+        Memory.repairing = {};
+    }
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
     }
@@ -15,54 +68,29 @@ roleRepairer.run = function run(creep) {
     }
 
     if (creep.memory.repairing) {
-        var structure = null;
-        $(this.repairing).each((s) => {
-            if (this.repairing[s] === creep.name) {
-                structure = Game.getObjectById(s);
-            }
-            if (!Game.creeps[creep.name]) {
-                delete this.repairing[s];
-            }
-        });
+        repairTarget = getLastRepairTarget(creep);
+        untargetedStructures = getUntargedStructures(creep);
 
-        // Get sources that are not being targeted by other repairers
-        var structures = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                var repairing = this.repairing[structure.id];
-                if (structure.hits == structure.hitsMax) {
-                    return false;
-                }
-                if (repairing && repairing === creep.name) {
-                    return true;
-                } else if (repairing && repairing !== creep.name) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        });
-        structures.sort((a, b) => a.hits - b.hits);
-
-        if (structure) {
+        if (repairTarget) {
             //count for each interval that a unit is repairing
             creep.memory.repairTime += 1;
-            var hitPcnt = structure.hits / structure.hitsMax;
-            // Repair structures to at least 25%
-            if (structure.hits === structure.hitsMax || creep.memory.repairTime >= 200) {
-                log.debug(creep.name + ' changed from ' + structure.id + '(' + hitPcnt + ') to ' + structures[0].id + '(' + structures[0].hits / structures[0].hitsMax + ')');
-                delete this.repairing[structure.id];
-                structure = structures[0];
+            var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
+            // Repair structures to at least 25% or 200 ticks
+            if (repairTarget.hits === repairTarget.hitsMax || creep.memory.repairTime >= 200) {
+                log.debug(creep.name + ' changed from ' + repairTarget.id + '(' + hitPcnt + ') to ' + untargetedStructures[0].id + '(' + untargetedStructures[0].hits / untargetedStructures[0].hitsMax + ')');
+                delete Memory.repairing[repairTarget.id];
+                repairTarget = untargetedStructures[0];
                 creep.memory.repairTime = 0;
-                this.repairing[structure.id] = creep.name;
+                Memory.repairing[repairTarget.id] = creep.name;
             }
-        } else if (!structure){
-            structure = structures[0];
-            log.debug(creep.name + ' set new target ' + structure.id);
-            this.repairing[structure.id] = creep.name;
+        } else {
+            repairTarget = untargetedStructures[0];
+            Memory.repairing[repairTarget.id] = creep.name;
+            log.debug(creep.name + ' set new target ' + repairTarget.id);
         }
 
-        if (structure) {
-            creep.repair_move(structure);
+        if (repairTarget) {
+            creep.repair_move(repairTarget);
         } else {
             roleBuilder.run(creep);
         }
