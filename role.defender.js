@@ -3,7 +3,16 @@ var Role = require('role.proto');
 var logger = require('logger');
 
 var roleDefender = new Role();
-roleDefender.run = function run(creep) {
+
+function getAndTransfer(creep, target) {
+    if (creep.carry.energy < creep.carryCapacity) {
+        creep.obtainClosestSource(creep.findClosestSource());
+    } else {
+        creep.transfer_move(target);
+    }
+}
+
+roleDefender.run = function run(creep, spawn) {
     var log = logger.getLogger('RoleDefender');
     var enemy = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
     var tower = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
@@ -17,11 +26,9 @@ roleDefender.run = function run(creep) {
         }
     } else if (tower) {
         // If a tower exists try to fill it with energy
-        if (creep.carry.energy < creep.carryCapacity) {
-            creep.obtainClosestSource(creep.findClosestSource());
-        } else {
-            creep.transfer_move(tower);
-        }
+        getAndTransfer(creep, tower);
+    } else if (spawn.energy < spawn.energyCapacity) {
+        getAndTransfer(creep, spawn);
     } else {
         // Fall back to upgrader
         roleUpgrader.run(creep);
