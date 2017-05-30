@@ -31,12 +31,12 @@ logger.getLogger = function (name, level) {
     }
 }
 
-logger.prototype.getLevelName = function () {
-    var name = logger.levels[this.level];
+logger.prototype.getLevelName = function (level) {
+    var name = logger.levels[level];
     if (name) {
         return name;
     } else {
-        return this.level;
+        return level;
     }
 }
 
@@ -48,7 +48,7 @@ logger.prototype.setLevel = function (level) {
 // Log to console
 logger.prototype.log = function (msg, level) {
     if (level >= this.level) {
-        console.log('[' + this.name + ':' + arguments.callee.caller.caller.name + ':' + this.getLevelName() + '] ' + msg);
+        console.log(`[${this.name}:${arguments.callee.caller.caller.name}:${this.getLevelName(level)}] ${msg}`);
     }
 };
 logger.prototype.critical = function (msg) {
