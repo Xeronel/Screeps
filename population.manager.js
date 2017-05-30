@@ -26,7 +26,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                 for (var i = 0; i < creepType.parts.length; i++) {
                     parts = creepType.parts[i];
                     partcost = $(parts).partCost();
-                    if ((partcost / spawn.room.energyAvailable) <= 0.75 || partcost === 200) {
+                    if ((partcost / spawn.room.energyAvailable) <= 0.60 || partcost === 200) {
                         finalParts = parts;
                         break;
                     }
