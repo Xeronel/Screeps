@@ -4,7 +4,7 @@ var logger = require('logger');
 
 var roleDefender = new Role();
 roleDefender.run = function run(creep) {
-    var log = logger.getLogger('RoleDefender', logger.DEBUG);
+    var log = logger.getLogger('RoleDefender');
     var enemy = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
     var tower = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: (s) => s.structureType === STRUCTURE_TOWER && s.energy < s.energyCapacity
