@@ -4,6 +4,7 @@ var $ = require('utils');
 var logger = require('logger');
 
 var roleRepairer = new Role();
+
 function getLastRepairTarget(creep) {
     var log = logger.getLogger('RoleRepair');
     var result;
@@ -25,7 +26,7 @@ function getLastRepairTarget(creep) {
     }
 
     for (var c in delList) {
-        log.debug("Cleaning node " + c + " from repair memory.");
+        log.debug(`Cleaning node ${c} from repair memory.`);
         delete Memory.repairing[c];
     }
 
@@ -80,7 +81,7 @@ roleRepairer.run = function run(creep) {
                 delete Memory.repairing[repairTarget.id];
                 creep.memory.repairTime = 0;
                 if (untargetedStructures[0]) {
-                    log.debug(creep.name + ' changed from ' + repairTarget.id + '(' + hitPcnt + ') to ' + untargetedStructures[0].id + '(' + untargetedStructures[0].hits / untargetedStructures[0].hitsMax + ')');
+                    log.debug(`${creep.name} changed from ${repairTarget.id}(${hitPcnt}) to ${untargetedStructures[0].id}( ${untargetedStructures[0].hits / untargetedStructures[0].hitsMax})`);
                     repairTarget = untargetedStructures[0];
                     Memory.repairing[repairTarget.id] = creep.name;
                 }
@@ -89,7 +90,7 @@ roleRepairer.run = function run(creep) {
             if (untargetedStructures[0]) {
                 repairTarget = untargetedStructures[0];
                 Memory.repairing[repairTarget.id] = creep.name;
-                log.debug(creep.name + ' set new target ' + repairTarget.id);
+                log.debug(`${creep.name} set new target ${repairTarget.id}`);
             }
         }
 
