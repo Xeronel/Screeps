@@ -5,7 +5,11 @@ var structureManager = {};
 // Keep track of last warning time
 Memory.lastDefWarning = 0;
 var log = logger.getLogger('StrucMan');
-Memory.TowerRepTime = {};
+
+// If object doesn't exist in memory then create it
+if (Memory.TowerRepTime == undefined) {
+    Memory.TowerRepTime = {};
+}
 
 function towerDefense(room, enemies, towers) {
     // Run tower defense
@@ -19,42 +23,49 @@ function towerDefense(room, enemies, towers) {
 }
 
 function towerRepair(room, towers) {
-
     for (var i = 0; i < towers.length; i++) {
         var tower = towers[i];
-        repairTarget = roleRepairer.getLastRepairTarget(tower);
-        untargetedStructures = roleRepairer.getUntargedStructures(tower);
+        // Only repair if tower is above 50% energy
+        if (tower.energy > tower.energyCapacity * 0.5) {
+            repairTarget = roleRepairer.getLastRepairTarget(tower);
+            untargetedStructures = roleRepairer.getUntargedStructures(tower);
 
-        if (repairTarget) {
-            //count for each interval that a unit is repairing
-            if (Memory.TowerRepTime[tower.id]) {
-                Memory.TowerRepTime[tower.id] += 1;
-            } else {
-                Memory.TowerRepTime[tower.id] = 0;
-            }
+            if (repairTarget) {
+                //count for each interval that a unit is repairing
+                if (Memory.TowerRepTime[tower.id]) {
+                    Memory.TowerRepTime[tower.id] += 1;
+                } else {
+                    Memory.TowerRepTime[tower.id] = 0;
+                }
 
-            var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
-            // Repair structures to at least 25% or 200 ticks
-            if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
-                delete Memory.repairing[repairTarget.id];
-                Memory.TowerRepTime[tower.id] = 0;
-                if (untargetedStructures[0]) {
-                    //log.debug(`${creep.name} changed from ${repairTarget.id}(${hitPcnt}) to ${untargetedStructures[0].id}(${untargetedStructures[0].hits / untargetedStructures[0].hitsMax})`);
+                var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
+                // Repair structures to at least 25% or 200 ticks
+                if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
+                    delete Memory.repairing[repairTarget.id];
+                    Memory.TowerRepTime[tower.id] = 0;
+                    if (untargetedStructures[0]) {
+                        repairTarget = untargetedStructures[0];
+                        Memory.repairing[repairTarget.id] = tower.id;
+                    }
+
+                    var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
+                    // Repair structures to at least 25% or 200 ticks
+                    if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[c.id] >= 200) {
+                        delete Memory.repairing[repairTarget.id];
+                        Memory.TowerRepTime[c.id] = 0;
+                        if (untargetedStructures[0]) {
+                            repairTarget = untargetedStructures[0];
+                            Memory.repairing[repairTarget.id] = c.id;
+                        }
+                    }
+                } else if (untargetedStructures[0]) {
                     repairTarget = untargetedStructures[0];
                     Memory.repairing[repairTarget.id] = tower.id;
                 }
             }
-
-        } else {
-            if (untargetedStructures[0]) {
-                repairTarget = untargetedStructures[0];
-                Memory.repairing[repairTarget.id] = tower.id;
-                //log.debug(`${creep.name} set new target ${repairTarget.id}`);
-
+            if (repairTarget) {
+                tower.repair(repairTarget);
             }
-        }
-        if (repairTarget) {
-            tower.repair(repairTarget);
         }
     }
 }
