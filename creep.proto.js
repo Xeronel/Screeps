@@ -12,6 +12,7 @@ Creep.prototype.pickup_move = function pickup_move(target) {
     }
     this.memory.lastAction = 'pickup_move';
 }
+
 Creep.prototype.harvest_move = function harvest_move(target) {
     if (this.memory.lastAction !== 'harvest_move') {
         this.say('⛏️ harvest');
@@ -104,8 +105,7 @@ Creep.prototype.withdraw_move = function withdraw_move(target, resourceType, amo
 
 Creep.prototype.findClosestSource = function findClosestSource() {
     var totalEnergy = 0;
-    var source = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES) ||
-        this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+    var source = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: (s) => {
                 if (s.structureType === STRUCTURE_STORAGE && s.store.energy >= 50) {
                     totalEnergy += s.store.energy;
