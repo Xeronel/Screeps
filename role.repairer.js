@@ -81,7 +81,7 @@ roleRepairer.run = function run(creep) {
                 delete Memory.repairing[repairTarget.id];
                 creep.memory.repairTime = 0;
                 if (untargetedStructures[0]) {
-                    log.debug(`${creep.name} changed from ${repairTarget.id}(${hitPcnt}) to ${untargetedStructures[0].id}( ${untargetedStructures[0].hits / untargetedStructures[0].hitsMax})`);
+                    log.debug(`${creep.name} changed from ${repairTarget.id}(${hitPcnt}) to ${untargetedStructures[0].id}(${untargetedStructures[0].hits / untargetedStructures[0].hitsMax})`);
                     repairTarget = untargetedStructures[0];
                     Memory.repairing[repairTarget.id] = creep.name;
                 }
