@@ -11,7 +11,7 @@ roleHarvester.run = function run(creep) {
     });
 
     // If creep isn't carrying max capacity, harvest
-    if (creep.carry.energy < creep.carryCapacity) {
+    if (_.sum(creep.carry) < creep.carryCapacity) {
         var source = creep.pos.findClosestByPath(FIND_SOURCES) ||
             creep.pos.findClosestByPath(FIND_SOURCES, {
                 ignoreCreeps: true
