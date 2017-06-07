@@ -5,7 +5,7 @@ var logger = require('logger');
 var roleDefender = new Role();
 
 function getAndTransfer(creep, target) {
-    if (creep.carry.energy < creep.carryCapacity) {
+    if (_.sum(creep.carry) < creep.carryCapacity) {
         creep.obtainClosestSource(creep.findClosestSource());
     } else {
         creep.transfer_move(target);

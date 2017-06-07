@@ -64,7 +64,7 @@ roleRepairer.run = function run(creep) {
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
     }
-    if (!creep.memory.repairing && creep.carry.energy == creep.carryCapacity) {
+    if (!creep.memory.repairing && _.sum(creep.carry) == creep.carryCapacity) {
         creep.memory.repairing = true;
     }
 
