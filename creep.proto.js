@@ -58,11 +58,11 @@ Creep.prototype.build_move = function build_move(target) {
     this.memory.lastAction = 'build_move';
 }
 
-Creep.prototype.transfer_move = function transfer_move(target) {
+Creep.prototype.transfer_move = function transfer_move(target, resourceType = RESOURCE_ENERGY) {
     if (this.memory.lastAction !== 'transfer_move') {
         this.say('🚚 deposit');
     }
-    if (this.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+    if (this.transfer(target, resourceType) == ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
                 opacity: 0.5,
