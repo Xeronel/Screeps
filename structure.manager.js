@@ -22,8 +22,8 @@ function towerRepair(room, towers) {
 
     for (var i = 0; i < towers.length; i++) {
         var tower = towers[i];
-        repairTarget = roleRepairer.getLastRepairTarget(c);
-        untargetedStructures = roleRepairer.getUntargedStructures(c);
+        repairTarget = roleRepairer.getLastRepairTarget(tower);
+        untargetedStructures = roleRepairer.getUntargedStructures(tower);
 
         if (repairTarget) {
             //count for each interval that a unit is repairing

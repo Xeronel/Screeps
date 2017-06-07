@@ -13,23 +13,20 @@ function getAndTransfer(creep, target) {
 }
 
 roleMule.run = function run(creep) {
-        var log = logger.getLogger('RoleMule');
+    var log = logger.getLogger('RoleMule');
 
-        var tower = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+    var eStructure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+        filter: (s) => s.structureType === STRUCTURE_TOWER || s.structureType === STRUCTURE_EXTENSION && s.energy < s.energyCapacity
+    });
 
-                    if (tower) {
-                        // If a tower exists try to fill it with energy
-                        getAndTransfer(creep, tower);
-                    }
-                    if (spawn.energy < spawn.energyCapacity)
-                    {
-                        getAndTransfer(creep, spawn);
-                    }
-                    else
-                    {
-                        // Fall back to upgrader
-                        roleUpgrader.run(creep);
-                    }
-                }
-});
-                module.exports = roleMule;
+    if (eStructure) {
+        // If a tower exists try to fill it with energy
+        getAndTransfer(creep, eStructure);
+    } else if (spawn.energy < spawn.energyCapacity) {
+        getAndTransfer(creep, spawn);
+    } else {
+        // Fall back to upgrader
+        roleUpgrader.run(creep);
+    }
+}
+module.exports = roleMule;
