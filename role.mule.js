@@ -12,7 +12,7 @@ function getAndTransfer(creep, target) {
     }
 }
 
-roleMule.run = function run(creep) {
+roleMule.run = function run(creep, spawn) {
     var log = logger.getLogger('RoleMule');
 
     var eStructure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {

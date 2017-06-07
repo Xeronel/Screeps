@@ -3,6 +3,7 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
 var roleDefender = require('role.defender');
+var roleAttacker = require('role.attacker');
 var roleMule = require('role.mule');
 var $ = require('utils');
 
@@ -37,8 +38,26 @@ var population = {
             [MOVE, CARRY, WORK]
         ]
     },
+    'attacker': {
+        qty: (room) => {
+            var flags = room.find(FIND_FLAGS).length;
+            //define your army size
+            var armySize = 4;
+            if (flags > 0){
+                log.warn("We're going to WAR! Unit Spawning Activated.");
+                return armySize * flags;
+            }
+        },
+        role: roleAttacker,
+        parts: [
+            [MOVE, MOVE, RANGED_ATTACK],
+            [MOVE, RANGED_ATTACK],
+            [MOVE, MOVE, ATTACK],
+            [MOVE, ATTACK]
+        ]
+    },
     'mule': {
-        qty: (sources) => {
+        qty: (room) => {
             var towers = room.find(FIND_MY_STRUCTURES, {
                 filter: {
                     structureType: STRUCTURE_TOWER
@@ -52,7 +71,7 @@ var population = {
         },
         role: roleMule,
         parts: [
-            [MMOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY],
+            [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY],
             [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY],
             [MOVE, MOVE, CARRY, CARRY, CARRY, CARRY],
             [MOVE, MOVE, CARRY, CARRY, CARRY],
@@ -60,7 +79,7 @@ var population = {
         ]
     },
     'defender': {
-        qty: (enemies) => {
+        qty: (room) => {
             var enemies = room.find(FIND_HOSTILE_CREEPS).length;
             if (enemies) {
                 return enemies;
