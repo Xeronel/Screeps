@@ -21,40 +21,40 @@ function towerDefense(room, enemies, towers) {
 function towerRepair(room, towers) {
 
     for (var i = 0; i < towers.length; i++) {
-        var c = towers[i];
+        var tower = towers[i];
         repairTarget = roleRepairer.getLastRepairTarget(c);
         untargetedStructures = roleRepairer.getUntargedStructures(c);
 
         if (repairTarget) {
             //count for each interval that a unit is repairing
-            if (Memory.TowerRepTime[c.id]) {
-                Memory.TowerRepTime[c.id] += 1;
+            if (Memory.TowerRepTime[tower.id]) {
+                Memory.TowerRepTime[tower.id] += 1;
             } else {
-                Memory.TowerRepTime[c.id] = 0;
+                Memory.TowerRepTime[tower.id] = 0;
             }
 
             var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
             // Repair structures to at least 25% or 200 ticks
-            if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[c.id] >= 200) {
+            if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
                 delete Memory.repairing[repairTarget.id];
-                Memory.TowerRepTime[c.id] = 0;
+                Memory.TowerRepTime[tower.id] = 0;
                 if (untargetedStructures[0]) {
                     //log.debug(`${creep.name} changed from ${repairTarget.id}(${hitPcnt}) to ${untargetedStructures[0].id}(${untargetedStructures[0].hits / untargetedStructures[0].hitsMax})`);
                     repairTarget = untargetedStructures[0];
-                    Memory.repairing[repairTarget.id] = c.id;
+                    Memory.repairing[repairTarget.id] = tower.id;
                 }
             }
 
         } else {
             if (untargetedStructures[0]) {
                 repairTarget = untargetedStructures[0];
-                Memory.repairing[repairTarget.id] = c.id;
+                Memory.repairing[repairTarget.id] = tower.id;
                 //log.debug(`${creep.name} set new target ${repairTarget.id}`);
 
             }
         }
         if (repairTarget) {
-            c.repair(repairTarget);
+            tower.repair(repairTarget);
         }
     }
 }
