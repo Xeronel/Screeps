@@ -106,14 +106,14 @@ Creep.prototype.withdraw_move = function withdraw_move(target, resourceType, amo
 Creep.prototype.findClosestSource = function findClosestSource() {
     var totalEnergy = 0;
     var source = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-            filter: (s) => {
-                if (s.structureType === STRUCTURE_STORAGE && s.store.energy >= 50) {
-                    totalEnergy += s.store.energy;
-                    return true;
-                }
-                return false;
+        filter: (s) => {
+            if (s.structureType === STRUCTURE_STORAGE && s.store.energy >= 50) {
+                totalEnergy += s.store.energy;
+                return true;
             }
-        });
+            return false;
+        }
+    });
     totalEnergy += this.room.energyAvailable;
 
     if (source) {
@@ -138,3 +138,9 @@ Creep.prototype.obtainClosestSource = function obtainClosestSource(target) {
         }
     }
 }
+
+Object.defineProperty(Creep.prototype, 'totalCarry', {
+    get: function () {
+        return _.sum(this.carry);
+    }
+});
