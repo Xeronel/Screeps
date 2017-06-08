@@ -28,7 +28,28 @@ function towerRepair(room, towers) {
         // Only repair if tower is above 50% energy
         if (tower.energy > tower.energyCapacity * 0.5) {
             repairTarget = roleRepairer.getLastRepairTarget(tower);
-            untargetedStructures = roleRepairer.getUntargedStructures(tower);
+            untargetedStructures = roleRepairer.getUntargedStructures(tower, {
+                filter: (structure) => {
+                    // Repair object in memory
+                    var repairing = Memory.repairing[structure.id];
+                    if (structure.hits == structure.hitsMax) {
+                        // Exclude if structure has full HP
+                        return false;
+                    } else if (structure.hits >= 100000) {
+                        // Exclude if structure has >= 100k HP
+                        return false;
+                    }
+                    if (repairing && repairing === tower.id) {
+                        // Include if the tower is already targeting this structure
+                        return true;
+                    } else if (repairing && repairing !== tower.id) {
+                        // Exclude if another object is targeting this structure
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            });
 
             if (repairTarget) {
                 //count for each interval that a unit is repairing
@@ -39,7 +60,8 @@ function towerRepair(room, towers) {
                 }
 
                 var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
-                // Repair structures to at least 25% or 200 ticks
+
+                // Repair structures to at least 25% or 200 ticks or 100k HP
                 if (repairTarget.hits >= 100000 || repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
                     delete Memory.repairing[repairTarget.id];
                     Memory.TowerRepTime[tower.id] = 0;
@@ -47,18 +69,9 @@ function towerRepair(room, towers) {
                         repairTarget = untargetedStructures[0];
                         Memory.repairing[repairTarget.id] = tower.id;
                     }
-
-                    var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
-                    // Repair structures to at least 25% or 200 ticks
-                    if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
-                        delete Memory.repairing[repairTarget.id];
-                        Memory.TowerRepTime[tower.id] = 0;
-                        if (untargetedStructures[0]) {
-                            repairTarget = untargetedStructures[0];
-                            Memory.repairing[repairTarget.id] = tower.id;
-                        }
-                    }
-                } else if (untargetedStructures[0]) {
+                }
+            } else {
+                if (untargetedStructures[0]) {
                     repairTarget = untargetedStructures[0];
                     Memory.repairing[repairTarget.id] = tower.id;
                 }

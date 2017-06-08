@@ -21,6 +21,9 @@ module.exports.loop = function main() {
 
     $(Game.spawns).each((s) => {
         var spawn = Game.spawns[s];
+        
+        // Manage the Structures
+        struManager.run(spawn.room);
 
         // Run all creep roles
         $(spawn.room.find(FIND_MY_CREEPS)).each((creep) => {
@@ -30,8 +33,5 @@ module.exports.loop = function main() {
                 log.warn(`Error running creep ${creep.name}, Memory: ${JSON.stringify(creep.memory)}`);
             }
         });
-
-        // Manage the Structures
-        struManager.run(spawn.room);
     });
 }
