@@ -120,7 +120,7 @@ Creep.prototype.findClosestSource = function findClosestSource() {
         return source;
     } else if (totalEnergy >= 300) {
         source = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-            filter: (s) => s.energy >= 50
+            filter: (s) => s.energy >= 50 && s.structureType !== STRUCTURE_TOWER
         }) || this.pos.findClosestByPath(FIND_SOURCES);
         return source;
     }
