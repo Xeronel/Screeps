@@ -28,4 +28,6 @@ roleHarvester.run = function run(creep) {
     }
 };
 
+roleHarvester.icon = "⛏";
+
 module.exports = roleHarvester;

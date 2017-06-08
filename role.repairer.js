@@ -103,6 +103,8 @@ roleRepairer.run = function run(creep) {
         var source = creep.findClosestSource();
         creep.obtainClosestSource(source);
     }
-}
+};
+
+roleRepairer.icon = "🔧";
 
 module.exports = roleRepairer;
