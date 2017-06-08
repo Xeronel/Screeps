@@ -17,4 +17,6 @@ roleUpgrader.run = function run(creep) {
     }
 };
 
+roleUpgrader.icon = "🛠";
+
 module.exports = roleUpgrader;

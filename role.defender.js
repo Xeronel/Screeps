@@ -17,6 +17,8 @@ roleDefender.run = function run(creep, spawn) {
         // Fall back to upgrader
         roleUpgrader.run(creep);
     }
-}
+};
+
+roleDefender.icon = "🛡";
 
 module.exports = roleDefender;

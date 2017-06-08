@@ -4,35 +4,27 @@ var logger = require('logger');
 
 var roleMule = new Role();
 
-function getAndTransfer(creep, target, totalCarry) {
-    if (creep.carry.energy === 0) {
-        creep.obtainClosestSource(creep.findClosestSource());
-    } else if (totalCarry - creep.carry.energy > 0) {
-        creep.transfer_move(creep.pos.findClosestByPath(FIND_STRUCTURES, {
-            filter: (s) => s.structureType === STRUCTURE_CONTAINER ||
-                s.structureType === STRUCTURE_STORAGE
-        }));
-    } else {
-        creep.transfer_move(target);
-    }
-}
-
 roleMule.run = function run(creep, spawn) {
-    var log = logger.getLogger('RoleMule');
-
+    var log = logger.getLogger('RoleMule', logger.DEBUG);
+    var totalCarry = creep.totalCarry;
     var eStructure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-        filter: (s) => s.structureType === STRUCTURE_TOWER ||
+        filter: (s) => (s.structureType === STRUCTURE_TOWER ||
             s.structureType === STRUCTURE_EXTENSION ||
-            s.structureType === STRUCTURE_SPAWN &&
+            s.structureType === STRUCTURE_SPAWN) &&
             s.energy < s.energyCapacity
     });
-    var totalCarry = _.sum(creep.carry);
     if (eStructure && totalCarry > 0) {
         // If a tower exists try to fill it with energy
-        getAndTransfer(creep, eStructure, totalCarry);
+        creep.transfer_move(eStructure);
+    } else if (creep.carry.energy === 0) {
+
+        creep.obtainClosestSource(creep.findClosestSource());
     } else {
         // Fall back to upgrader
         roleUpgrader.run(creep);
     }
-}
+};
+
+roleMule.icon = "🗑";
+
 module.exports = roleMule;

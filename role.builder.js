@@ -21,6 +21,8 @@ roleBuilder.run = function run(creep) {
         var source = creep.findClosestSource();
         creep.obtainClosestSource(source);
     }
-}
+};
+
+roleBuilder.icon = "🔨";
 
 module.exports = roleBuilder;
