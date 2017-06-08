@@ -35,12 +35,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                 if (finalParts) {
                     log.debug(`Trying to spawn ${role} ${finalParts} ${partcost}`);
                     // Spawns a new Unit
-                    var newName = spawn.createCreep(
-                        finalParts,
-                        undefined, {
-                            role: role
-                        }
-                    );
+                    var newName = spawn.createRole(role, finalParts, creepType.role.icon);
                     if (newName == ERR_NOT_ENOUGH_RESOURCES) {
                         log.debug(`Not enough energy to spawn ${role} (${spawn.room.energyAvailable}/${partcost})`);
                     }
