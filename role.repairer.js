@@ -3,6 +3,9 @@ var Role = require('role.proto');
 var $ = require('utils');
 var logger = require('logger');
 
+if (Memory.repairing == undefined) {
+    Memory.repairing = {};
+}
 var roleRepairer = new Role();
 
 roleRepairer.getLastRepairTarget = function getLastRepairTarget(obj) {
@@ -33,14 +36,15 @@ roleRepairer.getLastRepairTarget = function getLastRepairTarget(obj) {
     return result;
 };
 
-roleRepairer.getUntargedStructures = function getUntargedStructures(obj) {
-    // Get sources that are not being targeted by other repairers
-    var structures = obj.room.find(FIND_STRUCTURES, {
+roleRepairer.getUntargedStructures = function getUntargedStructures(obj, filter) {
+    filter = (typeof filter !== 'undefined') ? filter : {
         filter: (structure) => {
             var repairing = Memory.repairing[structure.id];
+
             if (structure.hits == structure.hitsMax) {
                 return false;
             }
+
             if (repairing && repairing === obj.id) {
                 return true;
             } else if (repairing && repairing !== obj.id) {
@@ -49,7 +53,10 @@ roleRepairer.getUntargedStructures = function getUntargedStructures(obj) {
                 return true;
             }
         }
-    });
+    };
+
+    // Get sources that are not being targeted by other repairers
+    var structures = obj.room.find(FIND_STRUCTURES, filter);
     structures.sort((a, b) => a.hits - b.hits);
     return structures;
 };
