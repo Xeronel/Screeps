@@ -25,6 +25,6 @@ roleMule.run = function run(creep, spawn) {
     }
 };
 
-roleMule.icon = "🗑";
+roleMule.icon = "🐎";
 
 module.exports = roleMule;
