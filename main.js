@@ -26,7 +26,6 @@ module.exports.loop = function main() {
         $(spawn.room.find(FIND_MY_CREEPS)).each((creep) => {
             if (population.hasOwnProperty(creep.memory.role)) {
                 population[creep.memory.role].role.run(creep, spawn);
-                population[creep.memory.role].role.draw(creep);
             } else {
                 log.warn(`Error running creep ${creep.name}, Memory: ${JSON.stringify(creep.memory)}`);
             }
