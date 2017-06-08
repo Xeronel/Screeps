@@ -25,9 +25,14 @@ roleMule.run = function run(creep, spawn) {
         // If a tower exists try to fill it with energy
         creep.transfer_move(eStructure);
     } else if (creep.memory.collecting) {
-        creep.obtainClosestSource(creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-            filter: (s) => (s.structureType === STRUCTURE_STORAGE)
-        }));
+        var dropE = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {filter: {resourceType: RESOURCE_ENERGY}});
+        if (dropE) {
+            creep.pickup_move(dropE);
+        } else {
+            creep.obtainClosestSource(creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                filter: (s) => (s.structureType === STRUCTURE_STORAGE)
+            }));
+        }
     } else {
         // Fall back to upgrader
         roleUpgrader.run(creep);
