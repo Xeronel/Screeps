@@ -1,4 +1,5 @@
 require('creep.proto');
+require('spawn.proto');
 var config = require('config');
 var logger = require('logger');
 var popManager = require('population.manager');
