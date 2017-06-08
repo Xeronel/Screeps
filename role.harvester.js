@@ -4,7 +4,19 @@ var Role = require('role.proto');
 var roleHarvester = new Role();
 roleHarvester.run = function run(creep) {
     var storage = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-        filter: (s) => s.structureType === STRUCTURE_STORAGE && s.store.energy < s.storeCapacity
+        filter: (s) => {
+            if (s.structureType === STRUCTURE_STORAGE) {
+                if (s.store.energy < s.storeCapacity) {
+                    return true;
+                }
+            } else if (s.structureType === STRUCTURE_EXTENSION) {
+                if (s.energy < s.energyCapacity) {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
     });
     var structure = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (s) => s.structureType === STRUCTURE_EXTENSION && s.energy < s.energyCapacity
@@ -22,10 +34,10 @@ roleHarvester.run = function run(creep) {
         if (source) {
             creep.harvest_move(source);
         }
-    } else if (storage) {
-        creep.transfer_move(storage);
     } else if (structure) {
         creep.transfer_move(structure);
+    } else if (storage) {
+        creep.transfer_move(storage);
     } else {
         roleUpgrader.run(creep);
     }
