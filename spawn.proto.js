@@ -34,10 +34,6 @@ function getUniqueName(prefix = '') {
     var name;
     var exists;
 
-    if (prefix) {
-        prefix += ' ';
-    }
-
     do {
         var list = Math.random() > 0.5 ? boyNames : girlNames;
         name = prefix + ' ' + list[Math.floor(Math.random() * list.length)];
@@ -54,8 +50,8 @@ function getUniqueName(prefix = '') {
     return name;
 }
 
-Spawn.prototype.createRole = function createRole(role, parts) {
-    this.createCreep(parts, getUniqueName(role.icon), {
-        role: role.role
+Spawn.prototype.createRole = function createRole(role, parts, prefix) {
+    return this.createCreep(parts, getUniqueName(prefix), {
+        role: role
     });
 };
