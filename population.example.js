@@ -20,7 +20,7 @@ var population = {
         ]
     },
     'builder': {
-        qty: () => 3,
+        qty: () => 1,
         role: roleBuilder,
         parts: [
             [MOVE, MOVE, CARRY, CARRY, WORK],
@@ -29,7 +29,7 @@ var population = {
         ]
     },
     'repairer': {
-        qty: () => 2,
+        qty: () => 0,
         role: roleRepairer,
         parts: [
             [MOVE, MOVE, MOVE, CARRY, CARRY, WORK],
@@ -43,7 +43,7 @@ var population = {
             var flags = room.find(FIND_FLAGS).length;
             //define your army size
             var armySize = 4;
-            if (flags > 0){
+            if (flags > 0) {
                 log.warn("We're going to WAR! Unit Spawning Activated.");
                 return armySize * flags;
             }
@@ -58,15 +58,23 @@ var population = {
     },
     'mule': {
         qty: (room) => {
-            var towers = room.find(FIND_MY_STRUCTURES, {
+            //qty = find number of towers + max(round(number of extensions/10),1)
+            var totalqty = room.find(FIND_MY_STRUCTURES, {
                 filter: {
                     structureType: STRUCTURE_TOWER
                 }
-            }).length;
-            if (towers) {
-                return towers;
+            }).length + Math.max(Math.round(room.find(FIND_MY_STRUCTURES, {
+                filter: {
+                    structureType: STRUCTURE_EXTENSION
+                }
+            }).length / 10), 1);
+
+            if (room.find(FIND_MY_STRUCTURES, {
+                    filter: (s) => s.structureType === STRUCTURE_STORAGE && s.energy > 10000
+                }).length > 0) {
+                return totalqty;
             } else {
-                return 0;
+                return 2;
             }
         },
         role: roleMule,
@@ -89,9 +97,9 @@ var population = {
         },
         role: roleDefender,
         parts: [
-            [MOVE, MOVE, MOVE, TOUGH, RANGED_ATTACK],
-            [MOVE, MOVE, TOUGH, RANGED_ATTACK],
-            [MOVE, MOVE, RANGED_ATTACK]
+            [MOVE, MOVE, MOVE, TOUGH, TOUGH, RANGED_ATTACK],
+            [MOVE, MOVE, TOUGH, TOUGH, RANGED_ATTACK],
+            [MOVE, MOVE, TOUGH, RANGED_ATTACK]
         ]
     },
     'harvester': {
