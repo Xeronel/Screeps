@@ -14,8 +14,10 @@ roleDefender.run = function run(creep, spawn) {
             creep.moveTo(enemy);
         }
     } else {
-        // Fall back to upgrader
-        roleUpgrader.run(creep);
+        // Kill itself LOL what a noob
+        if (spawn.recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+            creep.moveTo(spawn);
+        }
     }
 };
 
