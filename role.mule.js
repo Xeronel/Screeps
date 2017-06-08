@@ -9,16 +9,25 @@ roleMule.run = function run(creep, spawn) {
     var totalCarry = creep.totalCarry;
     var eStructure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: (s) => (s.structureType === STRUCTURE_TOWER ||
-            s.structureType === STRUCTURE_EXTENSION ||
-            s.structureType === STRUCTURE_SPAWN) &&
+                s.structureType === STRUCTURE_EXTENSION ||
+                s.structureType === STRUCTURE_SPAWN) &&
             s.energy < s.energyCapacity
     });
-    if (eStructure && totalCarry > 0) {
+
+    if (creep.carry.energy == 0) {
+        creep.memory.collecting = true;
+    }
+    if (creep.totalCarry == creep.carryCapacity) {
+        creep.memory.collecting = false;
+    }
+
+    if (!creep.memory.collecting) {
         // If a tower exists try to fill it with energy
         creep.transfer_move(eStructure);
-    } else if (creep.carry.energy === 0) {
-
-        creep.obtainClosestSource(creep.findClosestSource());
+    } else if (creep.memory.collecting) {
+        creep.obtainClosestSource(creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+            filter: (s) => (s.structureType === STRUCTURE_STORAGE)
+        }));
     } else {
         // Fall back to upgrader
         roleUpgrader.run(creep);

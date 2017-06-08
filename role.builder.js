@@ -6,7 +6,7 @@ roleBuilder.run = function run(creep) {
     if (creep.memory.building && creep.carry.energy == 0) {
         creep.memory.building = false;
     }
-    if (!creep.memory.building && _.sum(creep.carry) == creep.carryCapacity) {
+    if (!creep.memory.building && creep.totalCarry == creep.carryCapacity) {
         creep.memory.building = true;
     }
 

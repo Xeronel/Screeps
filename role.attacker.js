@@ -12,9 +12,6 @@ roleAttacker.run = function run(creep, spawn) {
     }).length;
 
     if (attackers > 0) {
-        if (Memory.attacking === undefined) {
-            Memory.attacking = {};
-        }
         if (!creep.memory.attacking && creep.pos === flag.pos) {
             creep.memory.attacking = true;
         } else {

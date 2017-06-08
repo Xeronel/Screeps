@@ -11,7 +11,7 @@ roleHarvester.run = function run(creep) {
     });
 
     // If creep isn't carrying max capacity, harvest
-    if (_.sum(creep.carry) < creep.carryCapacity) {
+    if (creep.totalCarry < creep.carryCapacity) {
         var source = creep.pos.findClosestByPath(FIND_SOURCES, {
                 filter: (s) => s.energy > 0
             }) ||
@@ -21,10 +21,10 @@ roleHarvester.run = function run(creep) {
         if (source) {
             creep.harvest_move(source);
         }
-    } else if (structure) {
-        creep.transfer_move(structure);
     } else if (storage) {
         creep.transfer_move(storage);
+    } else if (structure) {
+        creep.transfer_move(structure);
     } else {
         roleUpgrader.run(creep);
     }

@@ -40,7 +40,7 @@ function towerRepair(room, towers) {
 
                 var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
                 // Repair structures to at least 25% or 200 ticks
-                if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
+                if (repairTarget.hits >= 100000 || repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
                     delete Memory.repairing[repairTarget.id];
                     Memory.TowerRepTime[tower.id] = 0;
                     if (untargetedStructures[0]) {
@@ -50,12 +50,12 @@ function towerRepair(room, towers) {
 
                     var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
                     // Repair structures to at least 25% or 200 ticks
-                    if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[c.id] >= 200) {
+                    if (repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
                         delete Memory.repairing[repairTarget.id];
-                        Memory.TowerRepTime[c.id] = 0;
+                        Memory.TowerRepTime[tower.id] = 0;
                         if (untargetedStructures[0]) {
                             repairTarget = untargetedStructures[0];
-                            Memory.repairing[repairTarget.id] = c.id;
+                            Memory.repairing[repairTarget.id] = tower.id;
                         }
                     }
                 } else if (untargetedStructures[0]) {
