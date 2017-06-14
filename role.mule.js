@@ -5,7 +5,7 @@ var logger = require('logger');
 var roleMule = new Role();
 
 roleMule.run = function run(creep, spawn) {
-    var log = logger.getLogger('RoleMule', logger.DEBUG);
+    var log = logger.getLogger('RoleMule');
     var totalCarry = creep.totalCarry;
     var eStructure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: (s) => (s.structureType === STRUCTURE_TOWER ||

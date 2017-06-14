@@ -36,7 +36,7 @@ roleRepairer.getLastRepairTarget = function getLastRepairTarget(obj) {
     return result;
 };
 
-roleRepairer.getUntargedStructures = function getUntargedStructures(obj, filter) {
+roleRepairer.getUntargetedStructures = function getUntargetedStructures(obj, filter) {
     filter = (typeof filter !== 'undefined') ? filter : {
         filter: (structure) => {
             var repairing = Memory.repairing[structure.id];
@@ -77,7 +77,7 @@ roleRepairer.run = function run(creep) {
 
     if (creep.memory.repairing) {
         repairTarget = this.getLastRepairTarget(creep);
-        untargetedStructures = this.getUntargedStructures(creep);
+        untargetedStructures = this.getUntargetedStructures(creep);
 
         if (repairTarget) {
             //count for each interval that a unit is repairing
