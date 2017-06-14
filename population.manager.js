@@ -3,7 +3,11 @@ var $ = require('utils');
 var logger = require('logger');
 var config = require('config');
 
-Memory.LspawnTime = 0;
+if (Memory.LspawnTime === undefined)
+{
+    Memory.LspawnTime = Game.time;
+}
+
 var populationManager = {};
 populationManager.spawnCreeps = function spawnCreeps() {
     var log = logger.getLogger('PopMan', logger.DEBUG);
@@ -39,7 +43,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                             log.debug(`Not enough energy to spawn ${role} (${spawn.room.energyAvailable}/${partcost})`);
                         }
                         if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                            log.info(`Spawning" with last spawn = ${Memory.LspawnTime} and game time = ${Game.time}`);
+                            log.info(`Spawning with time between last spawn = ${Game.time - Memory.LspawnTime}`);
                             log.info(`Spawning ${role}: ${newName} [${finalParts}] (${partcost}/${spawn.room.energyAvailable})`);
                             Memory.LspawnTime = Game.time;
                         }

@@ -1,4 +1,3 @@
-var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 var logger = require('logger');
 
@@ -33,9 +32,6 @@ roleMule.run = function run(creep, spawn) {
                 filter: (s) => (s.structureType === STRUCTURE_STORAGE)
             }));
         }
-    } else {
-        // Fall back to upgrader
-        roleUpgrader.run(creep);
     }
 };
 
