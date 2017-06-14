@@ -11,7 +11,8 @@ var boyNames = [
     'Christopher', 'Blake', 'Austin', 'Jordan', 'Leo', 'Jonathan', 'Adrian',
     'Colin', 'Hudson', 'Ian', 'Xavier', 'Camden', 'Tristan', 'Carson', 'Jason',
     'Nolan', 'Riley', 'Lincoln', 'Brody', 'Bentley', 'Nathaniel', 'Josiah',
-    'Declan', 'Jake', 'Asher', 'Jeremiah', 'Cole', 'Mateo', 'Micah', 'Elliot'
+    'Declan', 'Jake', 'Asher', 'Jeremiah', 'Cole', 'Mateo', 'Micah', 'Elliot' ,
+    'Dingis'
 ];
 var girlNames = [
     'Sophia', 'Emma', 'Olivia', 'Isabella', 'Mia', 'Ava', 'Lily',

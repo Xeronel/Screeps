@@ -6,17 +6,21 @@ var roleAttacker = new Role();
 
 roleAttacker.run = function run(creep, spawn) {
     var log = logger.getLogger('RoleAttacker');
-    var flag = creep.pos.findClosestByPath(FIND_FLAGS);
+    var flags = _.filter(Game.flags, {color: COLOR_RED});
+    var roomsExit = creep.room.find(Game.map.findExit(creep.room, flags[0].room))
     var attackers = creep.find(FIND_CREEPS, {
         filter: (s) => creep.memory.role === roleAttacker
     }).length;
-
-    if (attackers > 0) {
-        if (!creep.memory.attacking && creep.pos === flag.pos) {
+    if(!creep.room.inRangeTo(roomsExit) && attackers <= 4)
+    {
+        creep.moveTo(roomsExit);
+    }
+    if (attackers > 4) {
+        if (!creep.memory.attacking && creep.pos === flags[0].pos) {
             creep.memory.attacking = true;
         } else {
             creep.memory.attacking = false;
-            creep.moveTo(flag);
+            creep.moveTo(flag[0]);
         }
 
         if(creep.memory.attacking){

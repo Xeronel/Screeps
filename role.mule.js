@@ -27,7 +27,7 @@ roleMule.run = function run(creep, spawn) {
     } else if (creep.memory.collecting) {
         var dropE = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {filter: {resourceType: RESOURCE_ENERGY}});
         if (dropE) {
-            creep.pickup_move(dropE);
+            creep.obtainClosestSource(dropE);
         } else {
             creep.obtainClosestSource(creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                 filter: (s) => (s.structureType === STRUCTURE_STORAGE)

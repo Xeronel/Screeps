@@ -29,7 +29,7 @@ var population = {
         ]
     },
     'repairer': {
-        qty: () => 0,
+        qty: () => 1,
         role: roleRepairer,
         parts: [
             [MOVE, MOVE, MOVE, CARRY, CARRY, WORK],
@@ -57,26 +57,11 @@ var population = {
         ]
     },
     'mule': {
-        qty: (room) => {
-            //qty = find number of towers + max(round(number of extensions/10),1)
-            var totalqty = room.find(FIND_MY_STRUCTURES, {
-                filter: {
-                    structureType: STRUCTURE_TOWER
-                }
-            }).length + Math.max(Math.round(room.find(FIND_MY_STRUCTURES, {
-                filter: {
-                    structureType: STRUCTURE_EXTENSION
-                }
-            }).length / 10), 1);
-
-            if (room.find(FIND_MY_STRUCTURES, {
-                    filter: (s) => s.structureType === STRUCTURE_STORAGE && s.energy > 10000
-                }).length > 0) {
-                return totalqty;
-            } else {
-                return 2;
+        qty: (room) => room.find(FIND_MY_STRUCTURES, {
+            filter: {
+                structureType: STRUCTURE_TOWER
             }
-        },
+        }).length,
         role: roleMule,
         parts: [
             [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, CARRY],
@@ -130,15 +115,15 @@ var population = {
         },
         role: roleHarvester,
         parts: [
-            [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK, WORK, WORK],
-            [MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK, WORK, WORK],
-            [MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK, WORK, WORK],
-            [MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK, WORK],
-            [MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK],
-            [MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK],
-            [MOVE, CARRY, WORK, WORK, WORK, WORK, WORK],
-            [MOVE, CARRY, WORK, WORK, WORK, WORK],
-            [MOVE, CARRY, WORK, WORK, WORK],
+            [MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, WORK, WORK, WORK, WORK],
+            [MOVE, MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, WORK, WORK, WORK, WORK],
+            [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, WORK, WORK, WORK, WORK],
+            [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, WORK, WORK, WORK],
+            [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY, WORK, WORK, WORK],
+            [MOVE, MOVE, CARRY, CARRY, CARRY, WORK, WORK, WORK],
+            [MOVE, CARRY, CARRY, CARRY, WORK, WORK, WORK],
+            [MOVE, CARRY, CARRY, CARRY, WORK, WORK],
+            [MOVE, CARRY, CARRY, WORK, WORK],
             [MOVE, CARRY, WORK, WORK],
             [MOVE, CARRY, WORK]
         ]
