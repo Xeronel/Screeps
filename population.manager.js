@@ -10,7 +10,7 @@ if (Memory.LspawnTime === undefined)
 
 var populationManager = {};
 populationManager.spawnCreeps = function spawnCreeps() {
-    var log = logger.getLogger('PopMan', logger.DEBUG);
+    var log = logger.getLogger('PopMan');
     $(Game.spawns).each(function spawnLoop(spawnName) {
         var spawn = Game.spawns[spawnName];
         var roomPopulation = spawn.room.find(FIND_MY_CREEPS);
@@ -21,7 +21,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                 roomPopulation,
                 (creep) => creep.memory.role == role
             );
-            if (Game.time - Memory.LspawnTime >= config.spawnTime) {
+            if (Game.time - Memory.LspawnTime >= config.spawn.time) {
                 if (rolePopulation.length < creepType.qty(spawn.room)) {
                     // Calculates cost available unit
                     var finalParts;
@@ -29,7 +29,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                     for (var i = 0; i < creepType.parts.length; i++) {
                         parts = creepType.parts[i];
                         partcost = $(parts).partCost();
-                        if ((partcost / spawn.room.energyAvailable) <= 0.60 || partcost === 200) {
+                        if ((partcost / spawn.room.energyAvailable) <= config.spawn.maxEnergyPercent || partcost === 200) {
                             finalParts = parts;
                             break;
                         }

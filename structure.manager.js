@@ -1,5 +1,7 @@
 var roleRepairer = require('role.repairer');
 var logger = require('logger');
+var config = require('config');
+
 var structureManager = {};
 
 // Keep track of last warning time
@@ -53,18 +55,25 @@ function towerRepair(room, towers) {
 
             if (repairTarget) {
                 //count for each interval that a unit is repairing
-                if (Memory.TowerRepTime[tower.id]) {
-                    Memory.TowerRepTime[tower.id] += 1;
-                } else {
+                if (Memory.TowerRepTime[tower.id] === undefined) {
                     Memory.TowerRepTime[tower.id] = 0;
+                } else {
+                    Memory.TowerRepTime[tower.id] += 1
                 }
 
                 var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
 
                 // Repair structures to at least 25% or 200 ticks or 100k HP
-                if (repairTarget.hits >= 100000 || repairTarget.hits === repairTarget.hitsMax || Memory.TowerRepTime[tower.id] >= 200) {
+                if (repairTarget.hits >= config.tower.maxRepair ||
+                    repairTarget.hits === repairTarget.hitsMax ||
+                    Memory.TowerRepTime[tower.id] >= config.tower.time ||
+                    (untargetedStructures[0].ticksToDecay <= config.repair.minDecayTime &&
+                    untargetedStructures[0].hits <= config.repair.minHits)) {
+
+                    log.debug(`${Memory.TowerRepTime[tower.id]}`);
                     delete Memory.repairing[repairTarget.id];
                     Memory.TowerRepTime[tower.id] = 0;
+
                     if (untargetedStructures[0]) {
                         repairTarget = untargetedStructures[0];
                         Memory.repairing[repairTarget.id] = tower.id;
@@ -85,7 +94,6 @@ function towerRepair(room, towers) {
 
 structureManager.run = function run(room) {
     var enemies = room.find(FIND_HOSTILE_CREEPS);
-    log.debug(`There are ${enemies.length}`);
     // Get list of towers
     var towers = room.find(FIND_MY_STRUCTURES, {
         filter: {

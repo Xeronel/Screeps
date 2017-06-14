@@ -19,8 +19,16 @@ roleHarvester.run = function run(creep) {
         }
     });
 
+    if (creep.carry.energy == 0) {
+        creep.memory.collecting = true;
+    }
+    if (creep.totalCarry == creep.carryCapacity) {
+        creep.memory.collecting = false;
+    }
+
+
     // If creep isn't carrying max capacity, harvest
-    if (creep.totalCarry < creep.carryCapacity) {
+    if (creep.memory.collecting) {
         var source = creep.pos.findClosestByPath(FIND_SOURCES, {
                 filter: (s) => s.energy > 0
             }) ||
@@ -30,7 +38,7 @@ roleHarvester.run = function run(creep) {
         if (source) {
             creep.harvest_move(source);
         }
-    } else if (storage) {
+    } else if (storage && !creep.memory.collecting) {
         creep.transfer_move(storage);
     } else {
         roleUpgrader.run(creep);

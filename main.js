@@ -10,7 +10,7 @@ var $ = require('utils');
 
 // Setup log
 var log = logger.getLogger();
-log.setLevel(config.logLevel);
+log.setLevel(config.log.level);
 
 module.exports.loop = function main() {
     // Remove dead creeps from memory
@@ -21,7 +21,7 @@ module.exports.loop = function main() {
 
     $(Game.spawns).each((s) => {
         var spawn = Game.spawns[s];
-        
+
         // Manage the Structures
         struManager.run(spawn.room);
 
