@@ -28,7 +28,7 @@ function towerRepair(room, towers) {
         // Only repair if tower is above 50% energy
         if (tower.energy > tower.energyCapacity * 0.5) {
             repairTarget = roleRepairer.getLastRepairTarget(tower);
-            untargetedStructures = roleRepairer.getUntargedStructures(tower, {
+            untargetedStructures = roleRepairer.getUntargetedStructures(tower, {
                 filter: (structure) => {
                     // Repair object in memory
                     var repairing = Memory.repairing[structure.id];
