@@ -4,7 +4,7 @@ var logger = require('logger');
 
 var roleAttacker = new Role();
 
-roleAttacker.run = function run(creep, spawn) {
+roleAttacker.run = function run(creep) {
     var log = logger.getLogger('RoleAttacker');
     var flags = _.filter(Game.flags, {color: COLOR_RED});
     var roomsExit = creep.room.find(Game.map.findExit(creep.room, flags[0].room))

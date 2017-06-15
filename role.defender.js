@@ -4,7 +4,7 @@ var logger = require('logger');
 
 var roleDefender = new Role();
 
-roleDefender.run = function run(creep, spawn) {
+roleDefender.run = function run(creep) {
     var log = logger.getLogger('RoleDefender');
     var enemy = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
 
@@ -14,6 +14,11 @@ roleDefender.run = function run(creep, spawn) {
             creep.moveTo(enemy);
         }
     } else {
+        var spawn = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+            filter: {
+                structureType: STRUCTURE_SPAWN
+            }
+        });
         // Kill itself LOL what a noob
         if (spawn.recycleCreep(creep) === ERR_NOT_IN_RANGE) {
             creep.moveTo(spawn);
