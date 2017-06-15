@@ -43,7 +43,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                             log.debug(`Not enough energy to spawn ${role} (${spawn.room.energyAvailable}/${partcost})`);
                         }
                         if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                            log.info(`Spawning with time between last spawn = ${Game.time - Memory.LspawnTime}`);
+                            log.debug(`Spawning with time between last spawn = ${Game.time - Memory.LspawnTime}`);
                             log.info(`Spawning ${role}: ${newName} [${finalParts}] (${partcost}/${spawn.room.energyAvailable})`);
                             Memory.LspawnTime = Game.time;
                         }
