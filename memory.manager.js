@@ -3,7 +3,7 @@ var population = require('population');
 
 var memManager = {};
 memManager.cleanCreeps = function cleanCreeps() {
-    var log = logger.getLogger('MemMan', logger.DEBUG);
+    var log = logger.getLogger('MemMan');
     for (var name in Memory.creeps) {
         if (!Game.creeps[name]) {
             if (population.hasOwnProperty(Memory.creeps[name].role)) {
