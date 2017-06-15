@@ -68,7 +68,7 @@ function towerRepair(room, towers) {
                     repairTarget.hits === repairTarget.hitsMax ||
                     Memory.TowerRepTime[tower.id] >= config.tower.time ||
                     (untargetedStructures[0].ticksToDecay <= config.repair.minDecayTime &&
-                    untargetedStructures[0].hits <= config.repair.minHits)) {
+                        untargetedStructures[0].hits <= config.repair.minHits)) {
 
                     log.debug(`${Memory.TowerRepTime[tower.id]}`);
                     delete Memory.repairing[repairTarget.id];
@@ -92,18 +92,21 @@ function towerRepair(room, towers) {
     }
 }
 
-structureManager.run = function run(room) {
-    var enemies = room.find(FIND_HOSTILE_CREEPS);
-    // Get list of towers
-    var towers = room.find(FIND_MY_STRUCTURES, {
-        filter: {
-            structureType: STRUCTURE_TOWER
+structureManager.run = function run() {
+    for (roomName in Game.rooms) {
+        var room = Game.rooms[roomName];
+        var enemies = room.find(FIND_HOSTILE_CREEPS);
+        // Get list of towers
+        var towers = room.find(FIND_MY_STRUCTURES, {
+            filter: {
+                structureType: STRUCTURE_TOWER
+            }
+        });
+        if (enemies.length > 0) {
+            towerDefense(room, enemies, towers);
+        } else {
+            towerRepair(room, towers);
         }
-    });
-    if (enemies.length > 0) {
-        towerDefense(room, enemies, towers);
-    } else {
-        towerRepair(room, towers);
     }
 }
 module.exports = structureManager;

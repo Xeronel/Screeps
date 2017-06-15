@@ -3,8 +3,7 @@ var $ = require('utils');
 var logger = require('logger');
 var config = require('config');
 
-if (Memory.LspawnTime === undefined)
-{
+if (Memory.LspawnTime === undefined) {
     Memory.LspawnTime = Game.time;
 }
 
@@ -35,7 +34,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                         }
                     }
 
-                    if(finalParts) {
+                    if (finalParts) {
                         log.debug(`Trying to spawn ${role} ${finalParts} ${partcost}`);
                         // Spawns a new Unit
                         var newName = spawn.createRole(role, finalParts, creepType.role.icon);
@@ -52,6 +51,18 @@ populationManager.spawnCreeps = function spawnCreeps() {
             }
         });
     });
-}
+};
+
+populationManager.runCreeps = function runCreeps() {
+    var log = logger.getLogger('PopMan');
+    for (creepName in Game.creeps) {
+        var creep = Game.creeps[creepName];
+        if (population.hasOwnProperty(creep.memory.role)) {
+            population[creep.memory.role].role.run(creep)
+        } else {
+            log.warn(`Error running creep ${creep.name}, Memory: ${JSON.stringify(creep.memory)}`);
+        }
+    }
+};
 
 module.exports = populationManager;
