@@ -1,23 +1,23 @@
 var Role = require('role.proto');
 var logger = require('logger');
 
-if (Memory.muleTargets == undefined) {
+if (Memory.muleTargets === undefined) {
     Memory.muleTargets = {};
 }
 var roleMule = new Role();
 
-roleMule.getUntargetedStructures = function getUntargetedStructures(obj, filter) {
+roleMule.getuntargetedStructure = function getuntargetedStructure(obj, filter) {
     filter = (typeof filter !== 'undefined') ? filter : {
         filter: (s) => {
             var targeted = Memory.muleTargets[s.id];
-            if (targeted && targeted === obj.id) {
-                return true;
-            } else if (targeted && targeted !== obj.id) {
+            if (targeted && targeted !== obj.id) {
                 return false;
             } else if ((s.structureType === STRUCTURE_TOWER ||
                     s.structureType === STRUCTURE_EXTENSION ||
                     s.structureType === STRUCTURE_SPAWN) &&
                 s.energy < s.energyCapacity) {
+                return true;
+            } else if (targeted && targeted === obj.id) {
                 return true;
             } else {
                 return false;
@@ -31,9 +31,10 @@ roleMule.getUntargetedStructures = function getUntargetedStructures(obj, filter)
 };
 
 roleMule.run = function run(creep) {
-    var log = logger.getLogger('RoleMule');
+    var log = logger.getLogger('RoleMule', logger.DEBUG);
     var totalCarry = creep.totalCarry;
     var target;
+    var untargetedStructure;
 
     if (creep.carry.energy == 0) {
         creep.memory.collecting = true;
@@ -43,22 +44,29 @@ roleMule.run = function run(creep) {
     }
 
     if (!creep.memory.collecting) {
-        if (creep.memory.repairTarget) {
-            target = Game.getObjectById(creep.memory.repairTarget);
+        if (creep.memory.muleTarget) {
+            target = Game.getObjectById(creep.memory.muleTarget);
             if (target.energy === target.energyCapacity) {
-                log.debug(`Deleted ${target}[${target.energy}/${target.energyCapacity}] from muleTargets`);
-                delete Memory.muleTargets[creep.memory.repairTarget];
-                target = this.getUntargetedStructures(creep);
-                if (target) {
-                    creep.memory.repairTarget = target.id;
+                untargetedStructure = this.getuntargetedStructure(creep);
+                delete Memory.muleTargets[creep.memory.muleTarget];
+                delete creep.memory.muleTarget;
+                log.debug(`Deleted ${target.id}[${target.energy}/${target.energyCapacity}] from muleTargets`);
+                if (untargetedStructure) {
+                    log.debug(`${creep.name} changed from ${target.id}[${target.energy}/${target.energyCapacity}] to ${untargetedStructure.id}[${untargetedStructure.energy}/${untargetedStructure.energyCapacity}]`);
+                    // Set new mule target
+                    target = untargetedStructure;
+                    creep.memory.muleTarget = target.id;
+                    Memory.muleTargets[creep.memory.muleTarget];
                 }
             }
         } else {
-            target = this.getUntargetedStructures(creep);
-            if (target) {
-                creep.memory.repairTarget = target.id;
+            untargetedStructure = this.getuntargetedStructure(creep);
+            if (untargetedStructure) {
+                // Set new mule target
+                target = untargetedStructure;
+                creep.memory.muleTarget = target.id;
                 Memory.muleTargets[target.id] = creep.id;
-                log.debug(`${creep.name} got new target ${target.id}`);
+                log.debug(`${creep.name} got new target ${target.id}[${target.energy}/${target.energyCapacity}]`);
             }
         }
         // If a tower exists try to fill it with energy
