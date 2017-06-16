@@ -49,12 +49,14 @@ roleMule.run = function run(creep) {
                 log.debug(`Deleted ${target}[${target.energy}/${target.energyCapacity}] from muleTargets`);
                 delete Memory.muleTargets[creep.memory.repairTarget];
                 target = this.getUntargetedStructures(creep);
-                creep.memory.repairTarget = target.id;
+                if (target) {
+                    creep.memory.repairTarget = target.id;
+                }
             }
         } else {
             target = this.getUntargetedStructures(creep);
-            creep.memory.repairTarget = target.id;
             if (target) {
+                creep.memory.repairTarget = target.id;
                 Memory.muleTargets[target.id] = creep.id;
                 log.debug(`${creep.name} got new target ${target.id}`);
             }
