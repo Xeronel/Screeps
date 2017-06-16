@@ -13,7 +13,7 @@ var log = logger.getLogger();
 log.setLevel(config.log.level);
 
 module.exports.loop = function main() {
-    memManager.cleanCreeps(); // Remove dead creeps from memory
+    memManager.run();
     popManager.spawnCreeps();
     struManager.run();
     popManager.runCreeps();

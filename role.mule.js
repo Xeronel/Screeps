@@ -52,12 +52,12 @@ roleMule.run = function run(creep) {
                 creep.memory.repairTarget = target.id;
             }
         } else {
-             target = this.getUntargetedStructures(creep);
-             creep.memory.repairTarget = target.id;
-             if (target) {
-                 Memory.muleTargets[target.id] = creep.id;
-                 log.debug(`${creep.name} got new target ${target.id}`);
-             }
+            target = this.getUntargetedStructures(creep);
+            creep.memory.repairTarget = target.id;
+            if (target) {
+                Memory.muleTargets[target.id] = creep.id;
+                log.debug(`${creep.name} got new target ${target.id}`);
+            }
         }
         // If a tower exists try to fill it with energy
         creep.transfer_move(target);
@@ -75,6 +75,11 @@ roleMule.run = function run(creep) {
             }));
         }
     }
+};
+
+roleMule.onDeath = function onDeath(name) {
+    var targetId = Memory.creeps[name].repairTarget;
+    delete Memory.muleTargets[targetId];
 };
 
 roleMule.icon = "🐎";
