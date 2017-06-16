@@ -7,7 +7,7 @@ memManager.cleanCreeps = function cleanCreeps() {
     for (var name in Memory.creeps) {
         if (!Game.creeps[name]) {
             if (population.hasOwnProperty(Memory.creeps[name].role)) {
-                population[Memory.creeps[name].role].role.onDeath(name, Memory.creeps[name]);
+                population[Memory.creeps[name].role].role.onDeath(name);
             }
             if (Memory.creeps[name] !== undefined) {
                 log.debug(`Deleted ${name} from memory.`);

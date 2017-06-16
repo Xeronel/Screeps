@@ -21,7 +21,7 @@ Role.prototype.run = Object.defineProperty(Role.prototype, 'run', {
     }
 });
 Role.prototype._onSpawn = function () {};
-Role.prototype.onSpawn = Object.defineProperty(Role.prototype, 'onSpawn', {
+Object.defineProperty(Role.prototype, 'onSpawn', {
     get: function get () {
         return function () {
             if (arguments.length > 0 && arguments[0] instanceof Creep) {
@@ -36,7 +36,7 @@ Role.prototype.onSpawn = Object.defineProperty(Role.prototype, 'onSpawn', {
 });
 
 Role.prototype.onSpawn = function onSpawn(creep) {};
-Role.prototype.onDeath = function onDeath(name, memory) {};
+Role.prototype.onDeath = function onDeath(name) {};
 Role.prototype.icon = '';
 
 module.exports = Role;
