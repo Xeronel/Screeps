@@ -56,7 +56,7 @@ roleMule.run = function run(creep) {
                     // Set new mule target
                     target = untargetedStructure;
                     creep.memory.muleTarget = target.id;
-                    Memory.muleTargets[creep.memory.muleTarget];
+                    Memory.muleTargets[target.id] = creep.id;
                 }
             }
         } else {
