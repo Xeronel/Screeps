@@ -25,7 +25,7 @@ memManager.cleanCreeps = function cleanCreeps() {
 memManager.cleanTowers = function cleanTowers() {
     var log = logger.getLogger('MemMan');
     for (var id in Memory.towers) {
-        if (!Game.towers[id]) {
+        if (!Memory.towers[id]) {
             StructureTower.onDeath(id);
             if (Memory.towers[id] !== undefined) {
                 log.debug(`Deleted ${id} from memory.`);
