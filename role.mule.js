@@ -8,7 +8,7 @@ var roleMule = new Role();
 roleMule.log = logger.getLogger('RoleMule');
 
 roleMule.getuntargetedStructure = function getuntargetedStructure(obj) {
-    // Get sources that are not being targeted by other repairers
+    // Get sources that are not being targeted by other mules
     return obj.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: (s) => {
             var targeted = Memory.muleTargets[s.id];
@@ -84,7 +84,7 @@ roleMule.run = function run(creep) {
 };
 
 roleMule.onDeath = function onDeath(name) {
-    var targetId = Memory.creeps[name].repairTarget;
+    var targetId = Memory.creeps[name].muleTarget;
     delete Memory.muleTargets[targetId];
 };
 
