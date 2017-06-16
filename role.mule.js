@@ -31,7 +31,7 @@ roleMule.getuntargetedStructure = function getuntargetedStructure(obj, filter) {
 };
 
 roleMule.run = function run(creep) {
-    var log = logger.getLogger('RoleMule', logger.DEBUG);
+    var log = logger.getLogger('RoleMule');
     var totalCarry = creep.totalCarry;
     var target;
     var untargetedStructure;
