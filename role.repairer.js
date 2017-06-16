@@ -35,6 +35,8 @@ roleRepairer.getUntargetedStructures = function getUntargetedStructures(obj, fil
 };
 
 roleRepairer.run = function run(creep) {
+    var repairTarget;
+
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
     }
@@ -44,7 +46,6 @@ roleRepairer.run = function run(creep) {
 
     if (creep.memory.repairing) {
         untargetedStructures = this.getUntargetedStructures(creep);
-        var repairTarget;
         if (creep.memory.repairTarget) {
             repairTarget = Game.getObjectById(creep.memory.repairTarget);
             creep.memory.repairTime += 1; // Count for each interval that a unit is repairing
@@ -53,6 +54,7 @@ roleRepairer.run = function run(creep) {
             // Repair structures to at least 25% or 200 ticks
             if (repairTarget.hits === repairTarget.hitsMax || creep.memory.repairTime >= config.repair.maxRepairTime) {
                 delete Memory.repairing[repairTarget.id];
+                delete Memory.repairTarget;
                 creep.memory.repairTime = 0;
                 if (untargetedStructures[0]) {
                     this.log.debug(`${creep.name} changed from ${repairTarget.id}(${hitPcnt}) to ${untargetedStructures[0].id}(${untargetedStructures[0].hits / untargetedStructures[0].hitsMax})`);
