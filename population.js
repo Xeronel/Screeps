@@ -19,14 +19,15 @@ var population = {
     },
     'builder': {
         qtyFnc: config.population.builder.qtyFnc ||
-            function () {
-                return config.population.builder.qty;
-            } ||
             function (room) {
-                return Math.min(Math.round(
-                        room.find(FIND_CONSTRUCTION_SITES).length *
-                        config.population.builder.percentConstSites),
-                    config.population.builder.maxBuilders);
+                if (config.population.builder.qty !== undefined) {
+                    return config.population.builder.qty;
+                } else {
+                    return Math.min(Math.round(
+                            room.find(FIND_CONSTRUCTION_SITES).length *
+                            config.population.builder.percentConstSites),
+                        config.population.builder.maxBuilders);
+                }
             },
         role: roleBuilder,
         parts: config.population.builder.parts
@@ -41,16 +42,17 @@ var population = {
     },
     'attacker': {
         qtyFnc: config.population.attacker.qtyFnc ||
-            function () {
-                return config.population.attacker.qty;
-            } ||
             function (room) {
-                var flags = room.find(FIND_FLAGS).length;
-                //define your army size
-                var armySize = 4;
-                if (flags > 0) {
-                    log.warn("We're going to WAR! Unit Spawning Activated.");
-                    return armySize * flags;
+                if (config.population.attacker.qty !== undefined) {
+                    return config.population.builder.qty;
+                } else {
+                    var flags = room.find(FIND_FLAGS).length;
+                    //define your army size
+                    var armySize = 4;
+                    if (flags > 0) {
+                        log.warn("We're going to WAR! Unit Spawning Activated.");
+                        return armySize * flags;
+                    }
                 }
             },
         role: roleAttacker,
@@ -58,30 +60,32 @@ var population = {
     },
     'mule': {
         qtyFnc: config.population.mule.qtyFnc ||
-            function () {
-                return config.population.mule.qty;
-            } ||
             function (room) {
-                return room.find(FIND_MY_STRUCTURES, {
-                    filter: {
-                        structureType: STRUCTURE_TOWER
-                    }
-                }).length;
+                if (config.population.builder.qty !== undefined) {
+                    return config.population.builder.qty;
+                } else {
+                    return room.find(FIND_MY_STRUCTURES, {
+                        filter: {
+                            structureType: STRUCTURE_TOWER
+                        }
+                    }).length;
+                }
             },
         role: roleMule,
         parts: config.population.mule.parts
     },
     'defender': {
         qtyFnc: config.population.defender.qtyFnc ||
-            function () {
-                return config.population.defender.qty;
-            } ||
             function (room) {
-                var enemies = room.find(FIND_HOSTILE_CREEPS).length;
-                if (enemies) {
-                    return enemies;
+                if (config.population.builder.qty !== undefined) {
+                    return config.population.builder.qty;
                 } else {
-                    return 0;
+                    var enemies = room.find(FIND_HOSTILE_CREEPS).length;
+                    if (enemies) {
+                        return enemies;
+                    } else {
+                        return 0;
+                    }
                 }
             },
         role: roleDefender,
@@ -90,32 +94,33 @@ var population = {
     'harvester': {
         rooms: {},
         qtyFnc: config.population.harvester.qtyFnc ||
-            function () {
-                return config.population.harvester.qty;
-            } ||
             function (room) {
-                var sources = room.find(FIND_SOURCES);
+                if (config.population.builder.qty !== undefined) {
+                    return config.population.builder.qty;
+                } else {
+                    var sources = room.find(FIND_SOURCES);
 
-                // If this is a new room add it
-                if (!population.harvester.rooms[room.name])
-                    population.harvester.rooms[room.name] = {
-                        'harvestablePos': 0
-                    };
+                    // If this is a new room add it
+                    if (!population.harvester.rooms[room.name])
+                        population.harvester.rooms[room.name] = {
+                            'harvestablePos': 0
+                        };
 
-                // Number of positions available around sources
-                var harvestablePos = population.harvester.rooms[room.name].harvestablePos;
-                if (harvestablePos === 0) {
-                    // Count the number of walkable tiles around each source
-                    $(sources).each((source) => {
-                        var pos = source.pos;
-                        var tiles = room.lookAtArea(pos.y - 1, pos.x - 1, pos.y + 1, pos.x + 1, true);
-                        var walkable = _.filter(tiles, (tile) => tile.type === 'terrain' && tile.terrain !== 'wall').length;
-                        harvestablePos += walkable;
-                    });
-                    // Cache the result
-                    population.harvester.rooms[room.name].harvestablePos = harvestablePos;
+                    // Number of positions available around sources
+                    var harvestablePos = population.harvester.rooms[room.name].harvestablePos;
+                    if (harvestablePos === 0) {
+                        // Count the number of walkable tiles around each source
+                        $(sources).each((source) => {
+                            var pos = source.pos;
+                            var tiles = room.lookAtArea(pos.y - 1, pos.x - 1, pos.y + 1, pos.x + 1, true);
+                            var walkable = _.filter(tiles, (tile) => tile.type === 'terrain' && tile.terrain !== 'wall').length;
+                            harvestablePos += walkable;
+                        });
+                        // Cache the result
+                        population.harvester.rooms[room.name].harvestablePos = harvestablePos;
+                    }
+                    return harvestablePos + 1;
                 }
-                return harvestablePos + 1;
             },
         role: roleHarvester,
         parts: config.population.harvester.parts
