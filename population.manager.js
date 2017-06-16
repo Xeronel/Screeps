@@ -21,7 +21,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                 (creep) => creep.memory.role == role
             );
             if (Game.time - Memory.lastSpawnTime >= config.spawn.time) {
-                if (rolePopulation.length < creepType.qty(spawn.room)) {
+                if (rolePopulation.length < creepType.qtyFnc(spawn.room)) {
                     // Calculates cost available unit
                     var finalParts;
                     var partcost;
