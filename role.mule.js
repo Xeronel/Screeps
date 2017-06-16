@@ -5,7 +5,7 @@ if (Memory.muleTargets === undefined) {
     Memory.muleTargets = {};
 }
 var roleMule = new Role();
-roleMule.log = logger.getLogger('RoleMule', logger.DEBUG);
+roleMule.log = logger.getLogger('RoleMule'/*, logger.DEBUG*/);
 
 roleMule.getuntargetedStructure = function getuntargetedStructure(obj) {
 
@@ -19,8 +19,6 @@ roleMule.getuntargetedStructure = function getuntargetedStructure(obj) {
                     s.structureType === STRUCTURE_EXTENSION ||
                     s.structureType === STRUCTURE_SPAWN) &&
                 s.energy < s.energyCapacity) {
-                return true;
-            } else if (targeted && targeted === obj.id) {
                 return true;
             } else {
                 return false;
