@@ -8,34 +8,6 @@ if (Memory.repairing == undefined) {
 }
 var roleRepairer = new Role();
 
-roleRepairer.getLastRepairTarget = function getLastRepairTarget(obj) {
-    var log = logger.getLogger('RoleRepair');
-    var result;
-    var delList = {};
-
-    for (var s in Memory.repairing) {
-        var objID = Memory.repairing[s];
-        // Flag dead creeps for removal from memory
-        if (Game.getObjectById(objID) === null) {
-            delList[s] = true;
-        }
-
-        if (objID === obj.id) {
-            result = Game.getObjectById(s);
-            break;
-        } else {
-            result = false;
-        }
-    }
-
-    for (var c in delList) {
-        log.debug(`Cleaning node ${c} from repair memory.`);
-        delete Memory.repairing[c];
-    }
-
-    return result;
-};
-
 roleRepairer.getUntargetedStructures = function getUntargetedStructures(obj, filter) {
     filter = (typeof filter !== 'undefined') ? filter : {
         filter: (structure) => {

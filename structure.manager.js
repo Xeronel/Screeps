@@ -29,7 +29,6 @@ function towerRepair(room, towers) {
         var tower = towers[i];
         // Only repair if tower is above 50% energy
         if (tower.energy > tower.energyCapacity * 0.5) {
-            repairTarget = roleRepairer.getLastRepairTarget(tower);
             untargetedStructures = roleRepairer.getUntargetedStructures(tower, {
                 filter: (structure) => {
                     // Repair object in memory
@@ -52,8 +51,10 @@ function towerRepair(room, towers) {
                     }
                 }
             });
+            var repairTarget;
 
-            if (repairTarget) {
+            if (tower.memory.repairTarget) {
+                repairTarget = Game.getObjectById(tower.memory.repairTarget);
                 //count for each interval that a unit is repairing
                 if (Memory.TowerRepTime[tower.id] === undefined) {
                     Memory.TowerRepTime[tower.id] = 0;
@@ -76,12 +77,14 @@ function towerRepair(room, towers) {
 
                     if (untargetedStructures[0]) {
                         repairTarget = untargetedStructures[0];
+                        tower.memory.repairTarget = repairTarget.id;
                         Memory.repairing[repairTarget.id] = tower.id;
                     }
                 }
             } else {
                 if (untargetedStructures[0]) {
                     repairTarget = untargetedStructures[0];
+                    tower.memory.repairTarget = repairTarget.id;
                     Memory.repairing[repairTarget.id] = tower.id;
                 }
             }
