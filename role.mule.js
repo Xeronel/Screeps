@@ -6,34 +6,6 @@ if (Memory.muleTargets == undefined) {
 }
 var roleMule = new Role();
 
-roleMule.getLastTarget = function getLastRepairTarget(obj) {
-    var log = logger.getLogger('RoleMule');
-    var result;
-    var delList = {};
-
-    for (var s in Memory.muleTargets) {
-        var objID = Memory.muleTargets[s];
-        // Flag dead creeps for removal from memory
-        if (Game.getObjectById(objID) === null) {
-            delList[s] = true;
-        }
-
-        if (objID === obj.id) {
-            result = Game.getObjectById(s);
-            break;
-        } else {
-            result = false;
-        }
-    }
-
-    for (var c in delList) {
-        log.debug(`Cleaning node ${c} from mule target memory.`);
-        delete Memory.muleTargets[c];
-    }
-
-    return result;
-};
-
 roleMule.getUntargetedStructures = function getUntargetedStructures(obj, filter) {
     filter = (typeof filter !== 'undefined') ? filter : {
         filter: (s) => {
@@ -71,15 +43,17 @@ roleMule.run = function run(creep) {
     }
 
     if (!creep.memory.collecting) {
-        target = this.getLastTarget(creep);
-        if (target) {
+        if (creep.memory.repairTarget) {
+            target = Game.getObjectById(creep.memory.repairTarget);
             if (target.energy === target.energyCapacity) {
-                log.debug(`Deleted ${target.id}[${target.energy}/${target.energyCapacity}] from muleTargets`);
-                delete Memory.muleTargets[target.id];
+                log.debug(`Deleted ${target}[${target.energy}/${target.energyCapacity}] from muleTargets`);
+                delete Memory.muleTargets[creep.memory.repairTarget];
+                target = this.getUntargetedStructures(creep);
+                creep.memory.repairTarget = target.id;
             }
-            target = this.getUntargetedStructures(creep);
         } else {
              target = this.getUntargetedStructures(creep);
+             creep.memory.repairTarget = target.id;
              if (target) {
                  Memory.muleTargets[target.id] = creep.id;
                  log.debug(`${creep.name} got new target ${target.id}`);
