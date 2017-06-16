@@ -1,6 +1,6 @@
 function Role() {}
 Role.prototype._run = function () {};
-Role.prototype.run = Object.defineProperty(Role.prototype, 'run', {
+Object.defineProperty(Role.prototype, 'run', {
     get: function () {
         return function run() {
             // If a creep was passed as the first argument
