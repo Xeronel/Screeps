@@ -11,7 +11,7 @@ var boyNames = [
     'Christopher', 'Blake', 'Austin', 'Jordan', 'Leo', 'Jonathan', 'Adrian',
     'Colin', 'Hudson', 'Ian', 'Xavier', 'Camden', 'Tristan', 'Carson', 'Jason',
     'Nolan', 'Riley', 'Lincoln', 'Brody', 'Bentley', 'Nathaniel', 'Josiah',
-    'Declan', 'Jake', 'Asher', 'Jeremiah', 'Cole', 'Mateo', 'Micah', 'Elliot' ,
+    'Declan', 'Jake', 'Asher', 'Jeremiah', 'Cole', 'Mateo', 'Micah', 'Elliot',
     'Dingis'
 ];
 var girlNames = [
@@ -52,7 +52,11 @@ function getUniqueName(prefix = '') {
 }
 
 Spawn.prototype.createRole = function createRole(role, parts, prefix) {
-    return this.createCreep(parts, getUniqueName(prefix), {
-        role: role
-    });
+    var result = ERR_NAME_EXISTS;
+    do {
+        result = this.createCreep(parts, getUniqueName(prefix), {
+            role: role
+        });
+    } while (result === ERR_NAME_EXISTS);
+    return result;
 };
