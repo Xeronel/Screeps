@@ -21,6 +21,7 @@ roleDefender.run = function run(creep) {
         });
         // Kill itself LOL what a noob
         if (spawn.recycleCreep(creep) === ERR_NOT_IN_RANGE) {
+            this.log.info(`${creep.name} killed himself.`);
             creep.moveTo(spawn);
         }
     }
