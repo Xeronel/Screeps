@@ -63,11 +63,7 @@ roleRepairer.getUntargetedStructures = function getUntargetedStructures(obj, fil
 
 roleRepairer.run = function run(creep) {
     var log = logger.getLogger('RoleRepair');
-    var repairTarget;
 
-    if (Memory.repairing === undefined) {
-        Memory.repairing = {};
-    }
     if (creep.memory.repairing && creep.carry.energy == 0) {
         creep.memory.repairing = false;
     }
@@ -76,12 +72,12 @@ roleRepairer.run = function run(creep) {
     }
 
     if (creep.memory.repairing) {
-        repairTarget = this.getLastRepairTarget(creep);
         untargetedStructures = this.getUntargetedStructures(creep);
+        var repairTarget;
+        if (creep.memory.repairTarget) {
+            repairTarget = Game.getObjectById(creep.memory.repairTarget);
+            creep.memory.repairTime += 1; // Count for each interval that a unit is repairing
 
-        if (repairTarget) {
-            //count for each interval that a unit is repairing
-            creep.memory.repairTime += 1;
             var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
             // Repair structures to at least 25% or 200 ticks
             if (repairTarget.hits === repairTarget.hitsMax || creep.memory.repairTime >= 200) {
@@ -89,13 +85,16 @@ roleRepairer.run = function run(creep) {
                 creep.memory.repairTime = 0;
                 if (untargetedStructures[0]) {
                     log.debug(`${creep.name} changed from ${repairTarget.id}(${hitPcnt}) to ${untargetedStructures[0].id}(${untargetedStructures[0].hits / untargetedStructures[0].hitsMax})`);
+                    // Set new repairTarget
                     repairTarget = untargetedStructures[0];
+                    creep.memory.repairTarget = repairTarget.id;
                     Memory.repairing[repairTarget.id] = creep.id;
                 }
             }
         } else {
             if (untargetedStructures[0]) {
                 repairTarget = untargetedStructures[0];
+                creep.memory.repairTarget = repairTarget.id;
                 Memory.repairing[repairTarget.id] = creep.id;
                 log.debug(`${creep.name} set new target ${repairTarget.id}`);
             }
@@ -110,6 +109,13 @@ roleRepairer.run = function run(creep) {
         var source = creep.findClosestSource();
         creep.obtainClosestSource(source);
     }
+};
+
+roleRepairer.onDeath = function onDeath(name) {
+    var log = logger.getLogger('RoleRepair');
+    var repId = Memory.creeps[name].repairTarget;
+    delete Memory.repairing[repId];
+    log.debug(`Removed node ${repId} from repair memory.`);
 };
 
 roleRepairer.icon = "🔧";
