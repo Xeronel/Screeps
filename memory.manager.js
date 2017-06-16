@@ -3,8 +3,8 @@ var population = require('population');
 
 var memManager = {};
 
-if (Memory.memTimer == undefined) {
-    Memory.memTimer = {};
+if (Memory.memTimer === undefined) {
+    Memory.memTimer = 0;
 }
 
 memManager.cleanCreeps = function cleanCreeps() {
