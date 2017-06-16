@@ -8,7 +8,6 @@ var roleMule = new Role();
 roleMule.log = logger.getLogger('RoleMule');
 
 roleMule.getuntargetedStructure = function getuntargetedStructure(obj) {
-
     // Get sources that are not being targeted by other repairers
     return obj.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: (s) => {
@@ -20,15 +19,16 @@ roleMule.getuntargetedStructure = function getuntargetedStructure(obj) {
                     s.structureType === STRUCTURE_SPAWN) &&
                 s.energy < s.energyCapacity) {
                 return true;
-            } else if (targeted && targeted === obj.id) {
-                return true;
             } else {
                 return false;
             }
         }
     });
 };
-
+roleMule.setNewTarget = function setNewTarget(creep, target) {
+    creep.memory.muleTarget = target.id;
+    Memory.muleTargets[target.id] = creep.id;
+};
 roleMule.run = function run(creep) {
     var totalCarry = creep.totalCarry;
     var target;
@@ -53,8 +53,7 @@ roleMule.run = function run(creep) {
                     this.log.debug(`${creep.name} changed from ${target.id}[${target.energy}/${target.energyCapacity}] to ${untargetedStructure.id}[${untargetedStructure.energy}/${untargetedStructure.energyCapacity}]`);
                     // Set new mule target
                     target = untargetedStructure;
-                    creep.memory.muleTarget = target.id;
-                    Memory.muleTargets[target.id] = creep.id;
+                    this.setNewTarget(creep, target);
                 }
             }
         } else {
@@ -62,8 +61,7 @@ roleMule.run = function run(creep) {
             if (untargetedStructure) {
                 // Set new mule target
                 target = untargetedStructure;
-                creep.memory.muleTarget = target.id;
-                Memory.muleTargets[target.id] = creep.id;
+                this.setNewTarget(creep, target);
                 this.log.debug(`${creep.name} got new target ${target.id}[${target.energy}/${target.energyCapacity}]`);
             }
         }
