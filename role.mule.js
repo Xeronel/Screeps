@@ -5,7 +5,7 @@ if (Memory.muleTargets === undefined) {
     Memory.muleTargets = {};
 }
 var roleMule = new Role();
-roleMule.log = logger.getLogger('RoleMule', logger.DEBUG);
+roleMule.log = logger.getLogger('RoleMule');
 
 roleMule.getuntargetedStructure = function getuntargetedStructure(obj) {
 
