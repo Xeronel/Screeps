@@ -3,22 +3,6 @@ var Role = require('role.proto');
 
 var roleHarvester = new Role();
 roleHarvester.run = function run(creep) {
-    var storage = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
-        filter: (s) => {
-            if (s.structureType === STRUCTURE_STORAGE) {
-                if (s.store.energy < s.storeCapacity) {
-                    return true;
-                }
-            } else if (s.structureType === STRUCTURE_EXTENSION) {
-                if (s.energy < s.energyCapacity) {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        }
-    });
-
     if (creep.carry.energy == 0) {
         creep.memory.collecting = true;
     }
@@ -37,10 +21,27 @@ roleHarvester.run = function run(creep) {
         if (source) {
             creep.harvest_move(source);
         }
-    } else if (storage && !creep.memory.collecting) {
-        creep.transfer_move(storage);
     } else {
-        roleUpgrader.run(creep);
+        var storage = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+            filter: (s) => {
+                if (s.structureType === STRUCTURE_STORAGE) {
+                    if (s.store.energy < s.storeCapacity) {
+                        return true;
+                    }
+                } else if (s.structureType === STRUCTURE_EXTENSION) {
+                    if (s.energy < s.energyCapacity) {
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        });
+        if (storage) {
+            creep.transfer_move(storage);
+        } else {
+            roleUpgrader.run(creep);
+        }
     }
 };
 roleHarvester.icon = "⛏";
