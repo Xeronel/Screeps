@@ -5,10 +5,12 @@ if (Memory.muleTargets === undefined) {
     Memory.muleTargets = {};
 }
 var roleMule = new Role();
-roleMule.log = logger.getLogger('RoleMule');
+roleMule.log = logger.getLogger('RoleMule', logger.DEBUG);
 
-roleMule.getuntargetedStructure = function getuntargetedStructure(obj, filter) {
-    filter = (typeof filter !== 'undefined') ? filter : {
+roleMule.getuntargetedStructure = function getuntargetedStructure(obj) {
+
+    // Get sources that are not being targeted by other repairers
+    return obj.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: (s) => {
             var targeted = Memory.muleTargets[s.id];
             if (targeted && targeted !== obj.id) {
@@ -24,11 +26,7 @@ roleMule.getuntargetedStructure = function getuntargetedStructure(obj, filter) {
                 return false;
             }
         }
-    };
-
-    // Get sources that are not being targeted by other repairers
-    var structures = obj.pos.findClosestByPath(FIND_MY_STRUCTURES, filter);
-    return structures;
+    });
 };
 
 roleMule.run = function run(creep) {

@@ -69,6 +69,7 @@ function towerRepair(room, towers) {
 
                     log.debug(`${Memory.towerRepTime[tower.id]}`);
                     delete Memory.repairing[repairTarget.id];
+                    delete tower.memory.repairTarget;
                     Memory.towerRepTime[tower.id] = 0;
 
                     if (untargetedStructures[0]) {
