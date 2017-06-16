@@ -3,9 +3,9 @@ var Role = require('role.proto');
 var logger = require('logger');
 
 var roleDefender = new Role();
+roleDefender.log = logger.getLogger('RoleDefender');
 
 roleDefender.run = function run(creep) {
-    var log = logger.getLogger('RoleDefender');
     var enemy = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
 
     if (enemy) {

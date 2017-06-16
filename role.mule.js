@@ -5,6 +5,7 @@ if (Memory.muleTargets === undefined) {
     Memory.muleTargets = {};
 }
 var roleMule = new Role();
+roleMule.log = logger.getLogger('RoleMule');
 
 roleMule.getuntargetedStructure = function getuntargetedStructure(obj, filter) {
     filter = (typeof filter !== 'undefined') ? filter : {
@@ -31,7 +32,6 @@ roleMule.getuntargetedStructure = function getuntargetedStructure(obj, filter) {
 };
 
 roleMule.run = function run(creep) {
-    var log = logger.getLogger('RoleMule');
     var totalCarry = creep.totalCarry;
     var target;
     var untargetedStructure;
@@ -50,9 +50,9 @@ roleMule.run = function run(creep) {
                 untargetedStructure = this.getuntargetedStructure(creep);
                 delete Memory.muleTargets[creep.memory.muleTarget];
                 delete creep.memory.muleTarget;
-                log.debug(`Deleted ${target.id}[${target.energy}/${target.energyCapacity}] from muleTargets`);
+                this.log.debug(`Deleted ${target.id}[${target.energy}/${target.energyCapacity}] from muleTargets`);
                 if (untargetedStructure) {
-                    log.debug(`${creep.name} changed from ${target.id}[${target.energy}/${target.energyCapacity}] to ${untargetedStructure.id}[${untargetedStructure.energy}/${untargetedStructure.energyCapacity}]`);
+                    this.log.debug(`${creep.name} changed from ${target.id}[${target.energy}/${target.energyCapacity}] to ${untargetedStructure.id}[${untargetedStructure.energy}/${untargetedStructure.energyCapacity}]`);
                     // Set new mule target
                     target = untargetedStructure;
                     creep.memory.muleTarget = target.id;
@@ -66,7 +66,7 @@ roleMule.run = function run(creep) {
                 target = untargetedStructure;
                 creep.memory.muleTarget = target.id;
                 Memory.muleTargets[target.id] = creep.id;
-                log.debug(`${creep.name} got new target ${target.id}[${target.energy}/${target.energyCapacity}]`);
+                this.log.debug(`${creep.name} got new target ${target.id}[${target.energy}/${target.energyCapacity}]`);
             }
         }
         // If a tower exists try to fill it with energy

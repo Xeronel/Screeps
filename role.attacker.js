@@ -3,18 +3,21 @@ var Role = require('role.proto');
 var logger = require('logger');
 
 var roleAttacker = new Role();
+roleAttacker.log = logger.getLogger('RoleAttacker');
 
 roleAttacker.run = function run(creep) {
-    var log = logger.getLogger('RoleAttacker');
-    var flags = _.filter(Game.flags, {color: COLOR_RED});
+    var flags = _.filter(Game.flags, {
+        color: COLOR_RED
+    });
     var roomsExit = creep.room.find(Game.map.findExit(creep.room, flags[0].room))
     var attackers = creep.find(FIND_CREEPS, {
         filter: (s) => creep.memory.role === roleAttacker
     }).length;
-    if(!creep.room.inRangeTo(roomsExit) && attackers <= 4)
-    {
+
+    if (!creep.room.inRangeTo(roomsExit) && attackers <= 4) {
         creep.moveTo(roomsExit);
     }
+
     if (attackers > 4) {
         if (!creep.memory.attacking && creep.pos === flags[0].pos) {
             creep.memory.attacking = true;
@@ -22,8 +25,7 @@ roleAttacker.run = function run(creep) {
             creep.memory.attacking = false;
             creep.moveTo(flag[0]);
         }
-
-        if(creep.memory.attacking){
+        if (creep.memory.attacking) {
             var enemies = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
             // If an enemy exists, try to attack it
             if (creep.rangedAttack(enemy) == ERR_NOT_IN_RANGE) {
@@ -33,8 +35,6 @@ roleAttacker.run = function run(creep) {
                 creep.moveTo(enemy);
             }
         }
-
-
     } else {
         // Fall back to upgrader
         roleDefender.run(creep);
