@@ -52,10 +52,10 @@ function towerRepair(room, towers) {
             if (tower.memory.repairTarget) {
                 repairTarget = Game.getObjectById(tower.memory.repairTarget);
                 // Count for each interval that a unit is repairing
-                if (Memory.TowerRepTime[tower.id] === undefined) {
-                    Memory.TowerRepTime[tower.id] = 0;
+                if (Memory.towerRepTime[tower.id] === undefined) {
+                    Memory.towerRepTime[tower.id] = 0;
                 } else {
-                    Memory.TowerRepTime[tower.id] += 1
+                    Memory.towerRepTime[tower.id] += 1
                 }
 
                 var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
@@ -69,7 +69,7 @@ function towerRepair(room, towers) {
 
                     log.debug(`${Memory.towerRepTime[tower.id]}`);
                     delete Memory.repairing[repairTarget.id];
-                    Memory.TowerRepTime[tower.id] = 0;
+                    Memory.towerRepTime[tower.id] = 0;
 
                     if (untargetedStructures[0]) {
                         repairTarget = untargetedStructures[0];
