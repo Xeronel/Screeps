@@ -3,8 +3,8 @@ var $ = require('utils');
 var logger = require('logger');
 var config = require('config');
 
-if (Memory.LspawnTime === undefined) {
-    Memory.LspawnTime = Game.time;
+if (Memory.lastSpawnTime === undefined) {
+    Memory.lastSpawnTime = Game.time;
 }
 
 var populationManager = {};
@@ -20,7 +20,7 @@ populationManager.spawnCreeps = function spawnCreeps() {
                 roomPopulation,
                 (creep) => creep.memory.role == role
             );
-            if (Game.time - Memory.LspawnTime >= config.spawn.time) {
+            if (Game.time - Memory.lastSpawnTime >= config.spawn.time) {
                 if (rolePopulation.length < creepType.qty(spawn.room)) {
                     // Calculates cost available unit
                     var finalParts;
@@ -42,9 +42,9 @@ populationManager.spawnCreeps = function spawnCreeps() {
                             log.debug(`Not enough energy to spawn ${role} (${spawn.room.energyAvailable}/${partcost})`);
                         }
                         if (newName !== ERR_NOT_ENOUGH_RESOURCES && newName !== ERR_BUSY) {
-                            log.debug(`Spawning with time between last spawn = ${Game.time - Memory.LspawnTime}`);
+                            log.debug(`Spawning with time between last spawn = ${Game.time - Memory.lastSpawnTime}`);
                             log.info(`Spawning ${role}: ${newName} [${finalParts}] (${partcost}/${spawn.room.energyAvailable})`);
-                            Memory.LspawnTime = Game.time;
+                            Memory.lastSpawnTime = Game.time;
                         }
                     }
                 }

@@ -1,8 +1,8 @@
 var Role = require('role.proto');
 var logger = require('logger');
 
-if (Memory.mule_targets == undefined) {
-    Memory.mule_targets = {};
+if (Memory.muleTargets == undefined) {
+    Memory.muleTargets = {};
 }
 var roleMule = new Role();
 
@@ -11,8 +11,8 @@ roleMule.getLastTarget = function getLastRepairTarget(obj) {
     var result;
     var delList = {};
 
-    for (var s in Memory.mule_targets) {
-        var objID = Memory.mule_targets[s];
+    for (var s in Memory.muleTargets) {
+        var objID = Memory.muleTargets[s];
         // Flag dead creeps for removal from memory
         if (Game.getObjectById(objID) === null) {
             delList[s] = true;
@@ -28,7 +28,7 @@ roleMule.getLastTarget = function getLastRepairTarget(obj) {
 
     for (var c in delList) {
         log.debug(`Cleaning node ${c} from mule target memory.`);
-        delete Memory.mule_targets[c];
+        delete Memory.muleTargets[c];
     }
 
     return result;
@@ -37,7 +37,7 @@ roleMule.getLastTarget = function getLastRepairTarget(obj) {
 roleMule.getUntargetedStructures = function getUntargetedStructures(obj, filter) {
     filter = (typeof filter !== 'undefined') ? filter : {
         filter: (s) => {
-            var targeted = Memory.mule_targets[s.id];
+            var targeted = Memory.muleTargets[s.id];
             if (targeted && targeted === obj.id) {
                 return true;
             } else if (targeted && targeted !== obj.id) {
@@ -74,14 +74,14 @@ roleMule.run = function run(creep) {
         target = this.getLastTarget(creep);
         if (target) {
             if (target.energy === target.energyCapacity) {
-                log.debug(`Deleted ${target.id}[${target.energy}/${target.energyCapacity}] from mule_targets`);
-                delete Memory.mule_targets[target.id];
+                log.debug(`Deleted ${target.id}[${target.energy}/${target.energyCapacity}] from muleTargets`);
+                delete Memory.muleTargets[target.id];
             }
             target = this.getUntargetedStructures(creep);
         } else {
              target = this.getUntargetedStructures(creep);
              if (target) {
-                 Memory.mule_targets[target.id] = creep.id;
+                 Memory.muleTargets[target.id] = creep.id;
                  log.debug(`${creep.name} got new target ${target.id}`);
              }
         }

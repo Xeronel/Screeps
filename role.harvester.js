@@ -26,7 +26,6 @@ roleHarvester.run = function run(creep) {
         creep.memory.collecting = false;
     }
 
-
     // If creep isn't carrying max capacity, harvest
     if (creep.memory.collecting) {
         var source = creep.pos.findClosestByPath(FIND_SOURCES, {
@@ -44,7 +43,6 @@ roleHarvester.run = function run(creep) {
         roleUpgrader.run(creep);
     }
 };
-
 roleHarvester.icon = "⛏";
 
 module.exports = roleHarvester;

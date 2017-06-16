@@ -1,4 +1,3 @@
-var roleRepairer = require('role.repairer');
 var logger = require('logger');
 var config = require('config');
 
@@ -9,8 +8,8 @@ Memory.lastDefWarning = 0;
 var log = logger.getLogger('StrucMan');
 
 // If object doesn't exist in memory then create it
-if (Memory.TowerRepTime == undefined) {
-    Memory.TowerRepTime = {};
+if (Memory.towerRepTime == undefined) {
+    Memory.towerRepTime = {};
 }
 
 function towerDefense(room, enemies, towers) {
@@ -28,34 +27,31 @@ function towerRepair(room, towers) {
     for (var i = 0; i < towers.length; i++) {
         var tower = towers[i];
         // Only repair if tower is above 50% energy
-        if (tower.energy > tower.energyCapacity * 0.5) {
-            untargetedStructures = roleRepairer.getUntargetedStructures(tower, {
+        if (tower.energy > tower.energyCapacity * config.tower.minEnRepair) {
+            untargetedStructures = tower.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    // Repair object in memory
                     var repairing = Memory.repairing[structure.id];
                     if (structure.hits == structure.hitsMax) {
-                        // Exclude if structure has full HP
                         return false;
                     } else if (structure.hits >= 100000) {
-                        // Exclude if structure has >= 100k HP
                         return false;
                     }
                     if (repairing && repairing === tower.id) {
-                        // Include if the tower is already targeting this structure
                         return true;
                     } else if (repairing && repairing !== tower.id) {
-                        // Exclude if another object is targeting this structure
                         return false;
                     } else {
                         return true;
                     }
                 }
             });
+            untargetedStructures.sort((a, b) => a.hits - b.hits);
+
             var repairTarget;
 
             if (tower.memory.repairTarget) {
                 repairTarget = Game.getObjectById(tower.memory.repairTarget);
-                //count for each interval that a unit is repairing
+                // Count for each interval that a unit is repairing
                 if (Memory.TowerRepTime[tower.id] === undefined) {
                     Memory.TowerRepTime[tower.id] = 0;
                 } else {
@@ -67,11 +63,11 @@ function towerRepair(room, towers) {
                 // Repair structures to at least 25% or 200 ticks or 100k HP
                 if (repairTarget.hits >= config.tower.maxRepair ||
                     repairTarget.hits === repairTarget.hitsMax ||
-                    Memory.TowerRepTime[tower.id] >= config.tower.time ||
+                    Memory.towerRepTime[tower.id] >= config.tower.time ||
                     (untargetedStructures[0].ticksToDecay <= config.repair.minDecayTime &&
                         untargetedStructures[0].hits <= config.repair.minHits)) {
 
-                    log.debug(`${Memory.TowerRepTime[tower.id]}`);
+                    log.debug(`${Memory.towerRepTime[tower.id]}`);
                     delete Memory.repairing[repairTarget.id];
                     Memory.TowerRepTime[tower.id] = 0;
 
@@ -111,5 +107,6 @@ structureManager.run = function run() {
             towerRepair(room, towers);
         }
     }
-}
+};
+
 module.exports = structureManager;

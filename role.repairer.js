@@ -1,4 +1,5 @@
 var roleBuilder = require('role.builder');
+var config = require('config')
 var Role = require('role.proto');
 var $ = require('utils');
 var logger = require('logger');
@@ -52,7 +53,7 @@ roleRepairer.run = function run(creep) {
 
             var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
             // Repair structures to at least 25% or 200 ticks
-            if (repairTarget.hits === repairTarget.hitsMax || creep.memory.repairTime >= 200) {
+            if (repairTarget.hits === repairTarget.hitsMax || creep.memory.repairTime >= config.repair.maxRepairTime) {
                 delete Memory.repairing[repairTarget.id];
                 creep.memory.repairTime = 0;
                 if (untargetedStructures[0]) {

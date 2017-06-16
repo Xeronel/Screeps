@@ -2,6 +2,11 @@ var logger = require('logger');
 var population = require('population');
 
 var memManager = {};
+
+if (Memory.memTimer == undefined) {
+    Memory.memTimer = {};
+}
+
 memManager.cleanCreeps = function cleanCreeps() {
     var log = logger.getLogger('MemMan');
     for (var name in Memory.creeps) {
@@ -16,5 +21,27 @@ memManager.cleanCreeps = function cleanCreeps() {
         }
     }
 };
+
+memManager.cleanTowers = function cleanTowers() {
+    var log = logger.getLogger('MemMan');
+    for (var id in Memory.towers) {
+        if (!Game.towers[id]) {
+            StructureTower.onDeath(id);
+            if (Memory.towers[id] !== undefined) {
+                log.debug(`Deleted ${id} from memory.`);
+                delete Memory.towers[id];
+            }
+        }
+    }
+};
+
+memManager.run = function run() {
+    Memory.memTimer += 1;
+    memManager.cleanCreeps();
+    if (Memory.memTimer >= 50) {
+        memManager.cleanTowers();
+        Memory.memTimer = 0;
+    }
+}
 
 module.exports = memManager;
