@@ -1,5 +1,6 @@
 var Role = require('role.proto');
 var logger = require('logger');
+const profiler = require('screeps-profiler');
 
 if (Memory.muleTargets === undefined) {
     Memory.muleTargets = {};
@@ -34,10 +35,10 @@ roleMule.run = function run(creep) {
     var target;
     var untargetedStructure;
 
-    if (creep.carry.energy == 0) {
+    if (!creep.memory.collecting && creep.carry.energy == 0) {
         creep.memory.collecting = true;
     }
-    if (creep.totalCarry == creep.carryCapacity) {
+    if (creep.memory.collecting && creep.totalCarry == creep.carryCapacity) {
         creep.memory.collecting = false;
     }
 
@@ -66,7 +67,9 @@ roleMule.run = function run(creep) {
             }
         }
         // If a tower exists try to fill it with energy
-        creep.transfer_move(target);
+        if (target) {
+            creep.transfer_move(target);
+        }
     } else if (creep.memory.collecting) {
         var dropE = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {
             filter: {
@@ -89,5 +92,5 @@ roleMule.onDeath = function onDeath(name) {
 };
 
 roleMule.icon = "🐎";
-
+profiler.registerClass(roleMule, 'roleMule');
 module.exports = roleMule;

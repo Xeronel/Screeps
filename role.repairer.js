@@ -3,6 +3,7 @@ var config = require('config')
 var Role = require('role.proto');
 var $ = require('utils');
 var logger = require('logger');
+const profiler = require('screeps-profiler');
 
 if (Memory.repairing == undefined) {
     Memory.repairing = {};
@@ -91,5 +92,7 @@ roleRepairer.onDeath = function onDeath(name) {
 };
 
 roleRepairer.icon = "🔧";
+
+profiler.registerClass(roleRepairer, 'roleRepairer');
 
 module.exports = roleRepairer;

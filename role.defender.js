@@ -1,6 +1,7 @@
 var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 var logger = require('logger');
+const profiler = require('screeps-profiler');
 
 var roleDefender = new Role();
 roleDefender.log = logger.getLogger('RoleDefender');
@@ -28,5 +29,5 @@ roleDefender.run = function run(creep) {
 };
 
 roleDefender.icon = "🛡";
-
+profiler.registerClass(roleDefender, 'roleDefender');
 module.exports = roleDefender;

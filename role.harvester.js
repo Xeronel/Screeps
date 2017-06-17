@@ -2,6 +2,7 @@ var roleUpgrader = require('role.upgrader');
 var Role = require('role.proto');
 var logger = require('logger');
 var $ = require('utils');
+const profiler = require('screeps-profiler');
 
 var roleHarvester = new Role();
 roleHarvester.log = logger.getLogger('RoleHarvest');
@@ -44,7 +45,9 @@ roleHarvester.run = function run(creep) {
     // If creep isn't carrying max capacity, harvest
     if (creep.memory.collecting) {
         source = Game.getObjectById(creep.memory.source);
-        creep.harvest_move(source);
+        if (source && source.energy > 0) {
+            creep.harvest_move(source);
+        }
     } else {
         var storage = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
             filter: (s) => {
@@ -63,12 +66,10 @@ roleHarvester.run = function run(creep) {
         });
         if (storage) {
             creep.transfer_move(storage);
-        } else {
-            roleUpgrader.run(creep);
         }
     }
 };
 
 roleHarvester.icon = "⛏";
-
+profiler.registerClass(roleHarvester, 'roleHarvester');
 module.exports = roleHarvester;
