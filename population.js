@@ -6,7 +6,10 @@ var roleDefender = require('role.defender');
 var roleAttacker = require('role.attacker');
 var roleMule = require('role.mule');
 var config = require('config');
+var logger = require('logger');
 var $ = require('utils');
+
+var log = logger.getLogger('Population');
 
 var population = {
     'upgrader': {
@@ -50,7 +53,7 @@ var population = {
                     //define your army size
                     var armySize = 4;
                     if (flags > 0) {
-                        log.warn("We're going to WAR! Unit Spawning Activated.");
+                        log.warn("We're going to WAR! Attacker spawning activated.");
                         return armySize * flags;
                     }
                 }
@@ -98,28 +101,17 @@ var population = {
                 if (config.population.builder.qty !== undefined) {
                     return config.population.builder.qty;
                 } else {
-                    var sources = room.find(FIND_SOURCES);
-
-                    // If this is a new room add it
-                    if (!population.harvester.rooms[room.name])
-                        population.harvester.rooms[room.name] = {
-                            'harvestablePos': 0
-                        };
-
-                    // Number of positions available around sources
-                    var harvestablePos = population.harvester.rooms[room.name].harvestablePos;
-                    if (harvestablePos === 0) {
+                    if (room.memory.harvestablePos === undefined) {
+                        log.debug('Calculating harvestable positions.');
                         // Count the number of walkable tiles around each source
-                        $(sources).each((source) => {
-                            var pos = source.pos;
-                            var tiles = room.lookAtArea(pos.y - 1, pos.x - 1, pos.y + 1, pos.x + 1, true);
-                            var walkable = _.filter(tiles, (tile) => tile.type === 'terrain' && tile.terrain !== 'wall').length;
-                            harvestablePos += walkable;
+                        var harvestablePos = 0;
+                        $(room.find(FIND_SOURCES)).each((source) => {
+                            harvestablePos += $(source).countHarvestable();
                         });
                         // Cache the result
-                        population.harvester.rooms[room.name].harvestablePos = harvestablePos;
+                        room.memory.harvestablePos = harvestablePos;
                     }
-                    return harvestablePos + 1;
+                    return room.memory.harvestablePos;
                 }
             },
         role: roleHarvester,
