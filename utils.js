@@ -1,13 +1,22 @@
 var wrapper = {};
 wrapper.each = function (fn) {
-    var iter = (val, idx, array) => {
-        fn(val, idx, array);
-    };
-
+    var result;
     if (Array.isArray(this.object)) {
-        this.object.forEach(iter);
+        for (var idx = 0; idx < this.object.length; idx++) {
+            result = fn(this.object[idx], idx, this.object);
+            if (result !== undefined) {
+                break;
+            }
+        }
+        return result;
     } else {
-        Object.getOwnPropertyNames(this.object).forEach(iter);
+        for (var idx in this.object) {
+            result = fn(this.object[idx], idx, this.object);
+            if (result !== undefined) {
+                break;
+            }
+        }
+        return result;
     }
 };
 
