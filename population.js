@@ -8,10 +8,8 @@ var roleMule = require('role.mule');
 var config = require('config');
 var logger = require('logger');
 var $ = require('utils');
-const profiler = require('screeps-profiler');
 
 var log = logger.getLogger('Population');
-
 var population = {
     'upgrader': {
         qtyFnc: config.population.upgrader.qtyFnc ||
@@ -120,5 +118,4 @@ var population = {
     }
 
 };
-profiler.registerClass(population, 'population');
 module.exports = population;
