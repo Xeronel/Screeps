@@ -2,7 +2,7 @@ Creep.prototype.pickup_move = function pickup_move(target) {
     if (this.memory.lastAction !== 'pickup_move') {
         this.say('pickup');
     }
-    if (this.pickup(target) == ERR_NOT_IN_RANGE) {
+    if (this.pickup(target) === ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
                 opacity: 0.5,
@@ -17,7 +17,7 @@ Creep.prototype.harvest_move = function harvest_move(target) {
     if (this.memory.lastAction !== 'harvest_move') {
         this.say('⛏️ harvest');
     }
-    if (this.harvest(target) == ERR_NOT_IN_RANGE) {
+    if (this.harvest(target) === ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
                 opacity: 0.5,
@@ -32,7 +32,7 @@ Creep.prototype.repair_move = function repair_move(target) {
     if (this.memory.lastAction !== 'repair_move') {
         this.say('🔧 repair');
     }
-    if (this.repair(target) == ERR_NOT_IN_RANGE) {
+    if (this.repair(target) === ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
                 opacity: 0.5,
@@ -62,7 +62,7 @@ Creep.prototype.transfer_move = function transfer_move(target) {
     if (this.memory.lastAction !== 'transfer_move') {
         this.say('🚚 deposit');
     }
-    if (this.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+    if (this.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
                 opacity: 0.5,
@@ -77,7 +77,7 @@ Creep.prototype.upgrade_move = function upgrade_move() {
     if (this.memory.lastAction !== 'upgrade_move') {
         this.say('⚡ upgrade');
     }
-    if (this.upgradeController(this.room.controller) == ERR_NOT_IN_RANGE) {
+    if (this.upgradeController(this.room.controller) === ERR_NOT_IN_RANGE) {
         this.moveTo(this.room.controller, {
             visualizePathStyle: {
                 opacity: 0.5,
@@ -92,7 +92,7 @@ Creep.prototype.withdraw_move = function withdraw_move(target, resourceType, amo
     if (this.memory.lastAction !== 'withdraw_move') {
         this.say('withdraw');
     }
-    if (this.withdraw(target, resourceType, amount) == ERR_NOT_IN_RANGE) {
+    if (this.withdraw(target, resourceType, amount) === ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
                 opacity: 0.5,
