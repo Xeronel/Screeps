@@ -121,15 +121,3 @@ var population = {
 };
 
 module.exports = population;
-
-/* $(population).each(function (role) {
-    population[role].cost = partCost(population[role].parts);
-});
-
-function partCost (parts) {
-    var cost = 0;
-    $(parts).each((s) => {
-        cost += BODYPART_COST[s];
-    });
-    return cost;
-} */
