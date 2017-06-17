@@ -1,3 +1,5 @@
+const profiler = require('screeps-profiler');
+
 var wrapper = {};
 wrapper.each = function (fn) {
     var result;
@@ -51,5 +53,5 @@ var $ = function (obj) {
         return w;
     }
 };
-
+profiler.registerClass(wrapper, 'wrapper');
 module.exports = $;
