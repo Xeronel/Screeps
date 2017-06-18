@@ -47,7 +47,8 @@ Creep.prototype.build_move = function build_move(target) {
     if (this.memory.lastAction !== 'build_move') {
         this.say('🔨 build');
     }
-    if (this.build(target) == ERR_NOT_IN_RANGE) {
+    var buildResult = this.build(target);
+    if (buildResult == ERR_NOT_IN_RANGE) {
         this.moveTo(target, {
             visualizePathStyle: {
                 opacity: 0.5,
@@ -82,7 +83,8 @@ Creep.prototype.upgrade_move = function upgrade_move() {
             visualizePathStyle: {
                 opacity: 0.5,
                 stroke: '#00ffff'
-            }
+            },
+            reusePath: 10
         });
     }
     this.memory.lastAction = 'upgrade_move';
