@@ -1,5 +1,6 @@
 var logger = require('logger');
 var population = require('population');
+var $ = require('utils');
 
 if (Memory.memTimer === undefined) {
     Memory.memTimer = 0;
@@ -33,10 +34,25 @@ memoryManager.cleanTowers = function cleanTowers() {
     }
 };
 
+memoryManager.cleanStructures = function cleanStructures() {
+    $(Memory.rooms).each((room, roomName) => {
+        $(room.structures).each((sMem, sType) => {
+            $(sMem).each((s, sId) => {
+                if (!Game.getObjectById(sId)) {
+                    this.log.debug(`Deleted structure ${sId}`);
+                    delete Memory.rooms[roomName].structures[sType][sId];
+                }
+            });
+        });
+    });
+}
+
 memoryManager.run = function run() {
     Memory.memTimer += 1;
     this.cleanCreeps();
+    // Clean long lived memory
     if (Memory.memTimer >= 50) {
+        this.cleanStructures();
         this.cleanTowers();
         Memory.memTimer = 0;
     }
