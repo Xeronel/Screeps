@@ -48,6 +48,15 @@ roleRepairer.run = function run(creep) {
     if (creep.memory.repairing) {
         if (creep.memory.repairTarget) {
             repairTarget = Game.getObjectById(creep.memory.repairTarget);
+
+            // This can happen if an item is deleted by the user mid repair
+            if (repairTarget === null) {
+                delete Memory.repairing[creep.memory.repairTarget];
+                delete Memory.repairTarget;
+                this.log.debug('Repair target deleted while being targeted');
+                return;
+            }
+
             creep.memory.repairTime += 1; // Count for each interval that a unit is repairing
 
             var hitPcnt = repairTarget.hits / repairTarget.hitsMax;

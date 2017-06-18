@@ -51,13 +51,19 @@ function towerRepair(room, towers) {
 
             if (tower.memory.repairTarget) {
                 repairTarget = Game.getObjectById(tower.memory.repairTarget);
+                if (!repairTarget) {
+                    delete Memory.repairing[tower.memory.repairTarget];
+                    delete tower.memory.repairTarget;
+                    Memory.towerRepTime[tower.id] = 0;
+                    log.debug('Repair target deleted while being targeted');
+                    return;
+                }
                 // Count for each interval that a unit is repairing
                 if (Memory.towerRepTime[tower.id] === undefined) {
                     Memory.towerRepTime[tower.id] = 0;
                 } else {
                     Memory.towerRepTime[tower.id] += 1
                 }
-
                 var hitPcnt = repairTarget.hits / repairTarget.hitsMax;
 
                 // Repair structures to at least 25% or 200 ticks or 100k HP
