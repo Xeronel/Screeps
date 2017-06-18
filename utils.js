@@ -12,13 +12,17 @@ wrapper.each = function (fn) {
         }
         return result;
     } else {
-        for (var idx in this.object) {
-            result = fn(this.object[idx], idx, this.object);
-            if (result !== undefined) {
-                break;
+        try {
+            for (var idx in this.object) {
+                result = fn(this.object[idx], idx, this.object);
+                if (result !== undefined) {
+                    break;
+                }
             }
+            return result;
+        } catch (e) {
+            return false;
         }
-        return result;
     }
 };
 
@@ -44,6 +48,16 @@ wrapper.countHarvestable = function countHarvestable () {
         source.room.memory.sources[source.id] = _.filter(tiles, (tile) => tile.type === 'terrain' && tile.terrain !== 'wall').length;
         return source.room.memory.sources[source.id];
     }
+};
+
+wrapper.addStorage = function addStorage(storage) {
+    var room = this.object;
+    if (room.memory.storage === undefined) {
+        room.memory.storage = {};
+        room.memory.storage.length = 0;
+    }
+    room.memory.storage[storage.id] = storage;
+    room.memory.storage.length += 1;
 };
 
 var $ = function (obj) {
